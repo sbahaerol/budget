@@ -1,0 +1,1205 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Haziran · Temmuz 2026 · Mali Rapor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+  :root, html[data-theme="dark"]{
+    --ink:#170F26; --ink-2:#0F0A1B;
+    --panel:#241733; --panel-2:#2C1D42;
+    --border:#3B2851;
+    --paper:#F1ECFA; --paper-dim:#B3A2C7; --paper-faint:#75647F;
+    --brass:#8B3DFF; --brass-bright:#B18AFF; --brass-dim:#5B2CA8;
+    --rise:#F0578A; --fall:#3ADC97;
+    --on-accent:#150C24;
+    --glow: rgba(139,61,255,0.14);
+    --topbar-bg: rgba(23,15,38,0.88);
+    --row-hover: rgba(139,61,255,0.07);
+    --fab-shadow: rgba(0,0,0,0.4);
+    --radius:2px;
+  }
+  html[data-theme="light"]{
+    --ink:#F8F6FC; --ink-2:#ECE4F7;
+    --panel:#FFFFFF; --panel-2:#F7F2FD;
+    --border:#E2D6F2;
+    --paper:#251935; --paper-dim:#5C4E70; --paper-faint:#8B7B9E;
+    --brass:#7C3AED; --brass-bright:#5B21B6; --brass-dim:#C4B5FD;
+    --rise:#C2255C; --fall:#059669;
+    --on-accent:#FFFFFF;
+    --glow: rgba(124,58,237,0.07);
+    --topbar-bg: rgba(255,255,255,0.85);
+    --row-hover: rgba(124,58,237,0.06);
+    --fab-shadow: rgba(80,60,120,0.22);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:radial-gradient(1200px 500px at 15% -10%, var(--glow), transparent 60%), var(--ink);
+    color:var(--paper);
+    font-family:'IBM Plex Sans', sans-serif;
+    -webkit-font-smoothing:antialiased;
+    transition:background .25s ease, color .25s ease;
+  }
+  .wrap{max-width:1040px;margin:0 auto;padding:0 28px 90px;}
+
+  /* ---------- TOPBAR ---------- */
+  .topbar{
+    position:sticky; top:0; z-index:50;
+    background:var(--topbar-bg);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--border);
+  }
+  .topbar-inner{
+    max-width:1040px;margin:0 auto;padding:16px 28px;
+    display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;
+  }
+  .brand{display:flex;align-items:center;gap:10px;}
+  .brand-mark{width:9px;height:9px;background:var(--brass);border-radius:1px;transform:rotate(45deg);}
+  .brand-text{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--paper-dim);}
+  .controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+
+  .pillgroup{
+    display:inline-flex;background:var(--panel);border:1px solid var(--border);border-radius:999px;padding:3px;gap:2px;
+  }
+  .pill{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11.5px; letter-spacing:.03em;
+    padding:7px 15px; border-radius:999px;
+    background:transparent; border:none; color:var(--paper-faint);
+    cursor:pointer; transition:all .2s ease;
+  }
+  .pill.active{background:var(--brass); color:var(--on-accent); font-weight:600;}
+  .pill:hover:not(.active){color:var(--paper);}
+
+  .view{display:none;}
+  .view.active{display:block;}
+
+  /* ---------- HEADER ---------- */
+  .header-block{padding-top:44px;}
+  .eyebrow{
+    font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.18em; text-transform:uppercase;
+    color:var(--brass); display:flex; align-items:center; gap:10px; margin-bottom:22px;
+  }
+  .eyebrow::before{content:"";width:22px;height:1px;background:var(--brass-dim);display:inline-block;}
+  h1{
+    font-family:'Fraunces', serif; font-optical-sizing:auto; font-weight:500;
+    font-size:clamp(30px,5.4vw,52px); line-height:1.05; margin:0 0 14px; letter-spacing:-0.01em;
+  }
+  h1 em{font-style:italic;font-weight:300;color:var(--paper-dim);}
+  .lede{font-size:15px;color:var(--paper-dim);max-width:560px;line-height:1.6;margin:0 0 44px;font-weight:400;}
+  .lede b{color:var(--paper);font-weight:500;}
+
+  /* ---------- HERO ---------- */
+  .hero{
+    border:1px solid var(--border); border-radius:var(--radius);
+    background:linear-gradient(180deg, var(--panel), var(--panel-2));
+    padding:34px 38px; display:flex; flex-wrap:wrap; align-items:flex-end; justify-content:space-between;
+    gap:26px; position:relative; overflow:hidden; margin-bottom:60px;
+  }
+  .hero::before{content:"";position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg, transparent, var(--brass), transparent);}
+  .hero-label{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--paper-faint);margin-bottom:10px;}
+  .hero-number{font-family:'Fraunces',serif;font-weight:400;font-size:clamp(42px,7.4vw,78px);line-height:1;letter-spacing:-0.02em;color:var(--paper);}
+  .hero-number sup{font-size:0.32em;font-weight:400;color:var(--paper-dim);top:-0.6em;}
+  .hero-compare{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--paper-faint);margin-top:12px;}
+  .hero-badge{
+    display:inline-flex;align-items:center;gap:8px;font-family:'IBM Plex Mono',monospace;font-size:14px;font-weight:500;
+    padding:9px 16px;border-radius:999px;white-space:nowrap;
+  }
+  .hero-badge.rise{border:1px solid var(--rise);color:var(--rise);}
+  .hero-badge.fall{border:1px solid var(--fall);color:var(--fall);}
+
+  /* ---------- SECTION HEADS ---------- */
+  .section-head{display:flex;align-items:baseline;justify-content:space-between;margin:0 0 6px;border-bottom:1px solid var(--border);padding-bottom:14px;}
+  .section-title{font-family:'Fraunces',serif;font-weight:500;font-size:23px;margin:0;}
+  .section-note{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--paper-faint);text-transform:uppercase;letter-spacing:.1em;}
+
+  /* ---------- LEDGER ---------- */
+  .ledger{margin:0 0 64px;}
+  .ledger-legend{display:flex;gap:22px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--paper-faint);margin:16px 0 8px;}
+  .ledger-legend span{display:flex;align-items:center;gap:6px;}
+  .dot{width:8px;height:8px;border-radius:50%;display:inline-block;}
+  .dot.brass{background:var(--brass);}
+  .dot.ring{border:1.5px solid var(--paper-dim);background:transparent;}
+
+  .row{display:grid;grid-template-columns:30px 168px 1fr 210px;align-items:center;gap:18px;padding:12px 0;border-bottom:1px solid var(--border);}
+  .row:last-child{border-bottom:none;}
+  .rank{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--brass-dim);}
+  .cat-name{font-size:13.5px;font-weight:500;color:var(--paper);line-height:1.25;}
+  .cat-name .sub{display:block;font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:400;color:var(--paper-faint);margin-top:2px;text-transform:uppercase;letter-spacing:.06em;}
+  .bar-track{position:relative;height:8px;background:var(--ink-2);border-radius:1px;overflow:visible;}
+  .bar-fill{position:absolute;left:0;top:0;bottom:0;background:linear-gradient(90deg, var(--brass-dim), var(--brass));border-radius:1px;width:0;transition:width .7s cubic-bezier(.16,.84,.44,1);}
+  .bar-mark{position:absolute;top:-3px;width:2px;height:14px;background:var(--paper-dim);left:0;transition:left .7s cubic-bezier(.16,.84,.44,1);}
+  .bar-mark::after{content:"";position:absolute;top:-4px;left:50%;transform:translateX(-50%);width:5px;height:5px;border-radius:50%;background:var(--ink);border:1.5px solid var(--paper-dim);}
+  .figs{text-align:right;font-family:'IBM Plex Mono',monospace;}
+  .fig-main{font-size:14px;font-weight:500;color:var(--paper);}
+  .fig-delta{font-size:11px;margin-top:2px;}
+  .fig-delta.rise{color:var(--rise);}
+  .fig-delta.fall{color:var(--fall);}
+  .fig-delta.flat{color:var(--paper-faint);}
+  .fig-delta.new{color:var(--brass-bright);}
+
+  @media (max-width:640px){
+    .row{grid-template-columns:22px 108px 1fr 118px;gap:10px;}
+    .cat-name{font-size:12px;} .fig-main{font-size:12.5px;}
+  }
+
+  /* ---------- MOVERS ---------- */
+  .movers{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1px;background:var(--border);border:1px solid var(--border);margin-bottom:56px;}
+  .mover{background:var(--panel);padding:22px 20px;display:flex;flex-direction:column;gap:9px;}
+  .mover-tag{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--paper-faint);}
+  .mover-name{font-family:'Fraunces',serif;font-size:18px;font-weight:500;line-height:1.2;}
+  .mover-delta{font-family:'IBM Plex Mono',monospace;font-size:21px;font-weight:500;}
+  .mover-delta.rise{color:var(--rise);} .mover-delta.fall{color:var(--fall);} .mover-delta.new{color:var(--brass-bright);}
+  .mover-desc{font-size:11.5px;color:var(--paper-faint);line-height:1.5;}
+
+
+  .foot{border-top:1px solid var(--border);padding-top:26px;display:grid;grid-template-columns:1fr 1fr;gap:24px;font-size:12.5px;color:var(--paper-faint);line-height:1.7;}
+  .foot h4{font-family:'IBM Plex Mono',monospace;font-size:10.5px;text-transform:uppercase;letter-spacing:.1em;color:var(--brass);margin:0 0 10px;font-weight:500;}
+  .foot p{margin:0 0 8px;}
+  @media (max-width:640px){.foot{grid-template-columns:1fr;}}
+  .sig{margin-top:36px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--paper-faint);display:flex;justify-content:space-between;align-items:center;border-top:1px dashed var(--border);padding-top:18px;}
+
+  /* ---------- HAM VERI ---------- */
+  .rawhead{padding-top:40px;display:flex;flex-wrap:wrap;gap:16px;align-items:flex-end;justify-content:space-between;margin-bottom:18px;}
+  .rawtitle{font-family:'Fraunces',serif;font-weight:500;font-size:26px;margin:0 0 6px;}
+  .rawsub{font-size:13px;color:var(--paper-dim);max-width:520px;line-height:1.6;}
+  .rawsub b{color:var(--brass-bright);}
+  .rawtools{display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
+  .btn{
+    font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.03em;
+    padding:9px 16px;border-radius:2px;border:1px solid var(--border);background:var(--panel);
+    color:var(--paper-dim);cursor:pointer;transition:all .15s ease;
+  }
+  .btn:hover{border-color:var(--brass-dim);color:var(--paper);}
+  .btn.primary{border-color:var(--brass);color:var(--brass-bright);}
+
+  .livebar{
+    display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;
+    background:var(--panel);border:1px solid var(--border);border-radius:2px;padding:16px 22px;margin-bottom:2px;
+  }
+  .livebar-stat{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--paper-faint);}
+  .livebar-stat b{font-family:'Fraunces',serif;font-size:20px;font-weight:500;color:var(--paper);margin-left:8px;}
+  .livebar-hint{font-size:11px;color:var(--paper-faint);font-style:italic;}
+
+  .tablewrap{
+    max-height:640px;overflow-y:auto;overflow-x:auto;
+    border:1px solid var(--border);border-top:none;margin-bottom:26px;
+    scrollbar-width:thin;scrollbar-color:var(--brass-dim) var(--ink-2);
+  }
+  table.raw{width:100%;border-collapse:collapse;font-size:12.5px;min-width:760px;}
+  table.raw thead th{
+    position:sticky;top:0;background:var(--ink-2);
+    font-family:'IBM Plex Mono',monospace;font-size:10.5px;text-transform:uppercase;letter-spacing:.07em;
+    color:var(--brass);text-align:left;padding:11px 14px;border-bottom:1px solid var(--border);z-index:2;
+  }
+  table.raw td{padding:9px 14px;border-bottom:1px solid var(--border);color:var(--paper-dim);vertical-align:middle;}
+  table.raw tbody tr:hover{background:var(--row-hover);}
+  table.raw td.desc{color:var(--paper);font-weight:500;}
+  table.raw td.mono{font-family:'IBM Plex Mono',monospace;}
+  table.raw td.amt{font-family:'IBM Plex Mono',monospace;text-align:right;color:var(--paper);}
+  table.raw td.amt.neg{color:var(--fall);}
+  .cat-select{
+    background:var(--ink-2);border:1px solid var(--border);color:var(--paper);
+    font-family:'IBM Plex Sans',sans-serif;font-size:11.5px;padding:5px 8px;border-radius:2px;
+    width:100%;cursor:pointer;
+  }
+  .cat-select:focus{outline:1px solid var(--brass);}
+  .amt-input{
+    background:var(--ink-2);border:1px solid var(--border);color:var(--paper);
+    font-family:'IBM Plex Mono',monospace;font-size:12px;padding:5px 8px;border-radius:2px;
+    width:110px;text-align:right;
+  }
+  .amt-input:focus{outline:1px solid var(--brass);}
+  .amt-input.edited, .cat-select.edited{border-color:var(--brass);background:var(--row-hover);}
+  .card-tag{
+    font-family:'IBM Plex Mono',monospace;font-size:10px;padding:3px 8px;border-radius:999px;
+    border:1px solid var(--border);color:var(--paper-faint);white-space:nowrap;
+  }
+
+  /* scroll fab */
+  .fab{
+    position:fixed;bottom:26px;right:26px;z-index:60;
+    width:46px;height:46px;border-radius:50%;
+    background:var(--brass);color:var(--on-accent);border:none;
+    display:flex;align-items:center;justify-content:center;
+    cursor:pointer;box-shadow:0 6px 18px var(--fab-shadow);
+    font-size:18px;transition:transform .15s ease, opacity .2s ease;
+    opacity:0;pointer-events:none;
+  }
+  .fab.show{opacity:1;pointer-events:auto;}
+  .fab:hover{transform:translateY(-2px);}
+
+  @media (prefers-reduced-motion: reduce){.bar-fill,.bar-mark{transition:none;}}
+
+  /* ---------- VERİ GİRİŞİ ---------- */
+  .dropzone{
+    border:1.5px dashed var(--border);border-radius:4px;
+    padding:52px 24px;text-align:center;cursor:pointer;
+    transition:border-color .2s ease, background .2s ease;
+    background:var(--panel);
+  }
+  .dropzone:hover, .dropzone.drag{border-color:var(--brass);background:var(--row-hover);}
+  .dropzone-icon{font-size:26px;color:var(--brass);margin-bottom:12px;}
+  .dropzone-text{font-size:14px;color:var(--paper);}
+  .dropzone-text span{color:var(--paper-faint);font-weight:400;}
+  .dropzone-hint{margin-top:8px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--paper-faint);}
+  .upload-status{
+    margin-top:14px;font-family:'IBM Plex Mono',monospace;font-size:12px;
+    color:var(--fall);min-height:18px;
+  }
+  .upload-status.error{color:var(--rise);}
+
+  .months-list{display:flex;flex-direction:column;gap:1px;background:var(--border);border:1px solid var(--border);margin-bottom:8px;}
+  .month-item{
+    background:var(--panel);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;gap:14px;
+  }
+  .month-item-name{font-family:'Fraunces',serif;font-size:16px;font-weight:500;}
+  .month-item-meta{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--paper-faint);}
+  .month-item-actions{display:flex;gap:8px;align-items:center;}
+  .btn.small{padding:6px 12px;font-size:10.5px;}
+  .btn.danger{color:var(--rise);border-color:var(--rise);}
+
+  .entry-form{
+    display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;
+    background:var(--panel);border:1px solid var(--border);padding:26px;border-radius:2px;
+  }
+  .entry-form .field{display:flex;flex-direction:column;gap:6px;min-width:0;}
+  .entry-form .field.wide{grid-column:span 2;}
+  .entry-form .field.checkbox{justify-content:flex-end;flex-direction:row;align-items:center;gap:8px;}
+  .entry-form label{font-family:'IBM Plex Mono',monospace;font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--paper-faint);}
+  .entry-form input[type=text], .entry-form input[type=number], .entry-form select{
+    background:var(--ink-2);border:1px solid var(--border);color:var(--paper);
+    font-family:'IBM Plex Sans',sans-serif;font-size:13px;padding:9px 11px;border-radius:2px;
+    width:100%;min-width:0;
+  }
+  .entry-form input:focus, .entry-form select:focus{outline:1px solid var(--brass);border-color:var(--brass);}
+  @media (max-width:760px){
+    .entry-form{grid-template-columns:repeat(2,minmax(0,1fr));}
+    .entry-form .field.wide{grid-column:span 2;}
+  }
+  @media (max-width:480px){
+    .entry-form{grid-template-columns:minmax(0,1fr);}
+    .entry-form .field.wide{grid-column:span 1;}
+  }
+
+  /* ---------- DASHBOARD: KPI + TREND + INSIGHTS ---------- */
+  .kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border:1px solid var(--border);margin-bottom:56px;}
+  .kpi{background:var(--panel);padding:22px 22px;display:flex;flex-direction:column;gap:8px;}
+  .kpi-label{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--paper-faint);}
+  .kpi-value{font-family:'Fraunces',serif;font-size:26px;font-weight:500;line-height:1.15;}
+  .kpi-sub{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--paper-faint);}
+  @media (max-width:760px){.kpi-row{grid-template-columns:repeat(2,1fr);}}
+
+  .trend-wrap{margin-bottom:56px;}
+  .trend-chart{
+    display:flex;align-items:flex-end;gap:14px;
+    height:180px;padding:20px 22px 0;
+    background:var(--panel);border:1px solid var(--border);
+    overflow-x:auto;
+  }
+  .trend-bar-col{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:8px;min-width:64px;flex:1;height:100%;}
+  .trend-bar-value{font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--paper-dim);white-space:nowrap;}
+  .trend-bar{
+    width:100%;max-width:46px;background:linear-gradient(180deg, var(--brass-bright), var(--brass-dim));
+    border-radius:2px 2px 0 0;transition:height .7s cubic-bezier(.16,.84,.44,1);height:0;
+  }
+  .trend-bar.latest{background:linear-gradient(180deg, var(--brass-bright), var(--brass));}
+  .trend-bar-label{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--paper-faint);padding-bottom:14px;white-space:nowrap;}
+
+  .insights{margin-bottom:56px;}
+  .insight-list{display:flex;flex-direction:column;gap:1px;background:var(--border);border:1px solid var(--border);}
+  .insight-item{background:var(--panel);padding:16px 22px;display:flex;gap:14px;align-items:flex-start;}
+  .insight-mark{font-family:'Fraunces',serif;font-style:italic;color:var(--brass);font-size:16px;line-height:1.4;}
+  .insight-text{font-size:13px;color:var(--paper-dim);line-height:1.55;}
+  .insight-text b{color:var(--paper);font-weight:600;}
+
+  .pill.addmonth{color:var(--brass-bright);border:1px dashed var(--brass-dim);}
+  .pill.addmonth:hover{background:var(--row-hover);color:var(--brass-bright);}
+
+  /* ---------- TEMA DEĞİŞTİRİCİ ---------- */
+  .theme-toggle{
+    width:36px;height:36px;border-radius:50%;
+    background:var(--panel);border:1px solid var(--border);color:var(--paper-dim);
+    display:flex;align-items:center;justify-content:center;
+    cursor:pointer;font-size:15px;transition:all .2s ease;flex-shrink:0;
+  }
+  .theme-toggle:hover{border-color:var(--brass);color:var(--brass-bright);}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="brand"><span class="brand-mark"></span><span class="brand-text">SBE · Kişisel Mali Rapor</span></div>
+    <div class="controls">
+      <div class="pillgroup" id="viewTabs">
+        <button class="pill active" data-view="dashboard">Dashboard</button>
+        <button class="pill" data-view="ham">Ham Veri</button>
+        <button class="pill" data-view="giris">Veri Girişi</button>
+      </div>
+      <div class="pillgroup" id="monthTabsDashboard"></div>
+      <div class="pillgroup" id="monthTabsHam" style="display:none;"></div>
+      <button class="theme-toggle" id="themeToggle" title="Görünümü değiştir">
+        <span class="theme-icon">☾</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- ============ DASHBOARD VIEW ============ -->
+  <div class="view active" id="view-dashboard">
+    <div class="header-block">
+      <div class="eyebrow">Kişisel Mali Rapor · İstanbul</div>
+      <h1 id="ozetTitle">Haziran <em>→</em> Temmuz 2026</h1>
+      <p class="lede">Yapı Kredi Crystal, Garanti BBVA Amex Platinum ve iki ek hesabın konsolide dökümü. Eğitim yatırımı (700.000 TL / 12 taksit) tüm hesaplamalardan hariç tutulmuştur. Yeni ay eklemek için <b>Veri Girişi</b> sekmesini veya ay sekmelerindeki <b>+</b> butonunu kullanın.</p>
+    </div>
+
+    <div class="section-head">
+      <h2 class="section-title">Tüm Aylar Özeti</h2>
+      <span class="section-note" id="allMonthsNote">— ay</span>
+    </div>
+    <div class="kpi-row" id="kpiRow"></div>
+
+    <div class="trend-wrap">
+      <div class="section-head">
+        <h2 class="section-title">Aylık Trend</h2>
+        <span class="section-note">Eğitim hariç</span>
+      </div>
+      <div class="trend-chart" id="trendChart" style="margin-top:16px;"></div>
+    </div>
+
+    <div class="insights">
+      <div class="section-head">
+        <h2 class="section-title">Çıkarımlar</h2>
+        <span class="section-note">otomatik analiz</span>
+      </div>
+      <div class="insight-list" id="insightList" style="margin-top:16px;"></div>
+    </div>
+
+    <div class="section-head" style="margin-top:8px;">
+      <h2 class="section-title">Ay Detayı</h2>
+      <span class="section-note">seçili ay · bir önceki ayla kıyaslı</span>
+    </div>
+
+    <div class="hero" style="margin-top:16px;">
+      <div>
+        <div class="hero-label" id="heroLabel">Temmuz Toplam Harcama</div>
+        <div class="hero-number" id="heroNumber">0<sup>TL</sup></div>
+        <div class="hero-compare" id="heroCompare">Haziran: 0 TL</div>
+      </div>
+      <div class="hero-badge" id="heroBadge">— TL</div>
+    </div>
+
+    <div class="ledger">
+      <div class="section-head">
+        <h2 class="section-title">Kategori Defteri</h2>
+        <span class="section-note" id="ledgerNote">Temmuz'a göre sıralı</span>
+      </div>
+      <div class="ledger-legend">
+        <span><span class="dot brass"></span> <span id="legendActive">Temmuz</span> tutarı</span>
+        <span><span class="dot ring"></span> <span id="legendOther">Haziran</span> konumu</span>
+      </div>
+      <div id="ledgerRows"></div>
+    </div>
+
+    <div class="movers" id="moversGrid"></div>
+
+    <div class="foot">
+      <div>
+        <h4>Kapsam Dışı</h4>
+        <p>MOKAUnited/Derssanal eğitim yatırımı (aylık ~58.333 TL taksit, 700.000 TL / 12 ay) bilinçli olarak toplamlara dahil edilmemiştir — passthrough niteliğindedir.</p>
+        <p>Negatif tutarlar; restoran/otopark indirimleri ve kampanya iadelerini yansıtır, ilgili kategoriden düşülmüştür.</p>
+      </div>
+      <div>
+        <h4>Kaynaklar</h4>
+        <p>Yapı Kredi Crystal, Garanti BBVA Amex Platinum, Kart •8016, Kart •032 — yüklü aylar toplamı <span id="rowCountNote">334</span> işlem satırı.</p>
+        <p><b>Ham Veri</b> sekmesinden tüm işlemleri kategori bazında görüntüleyip düzenleyebilirsiniz — değişiklikler bu özeti anında günceller.</p>
+      </div>
+    </div>
+
+    <div class="sig">
+      <span>SBE / KİŞİSEL FİNANS TAKİBİ</span>
+      <span>Hazırlanma: Ağustos 2026</span>
+    </div>
+  </div>
+
+  <!-- ============ HAM VERİ VIEW ============ -->
+  <div class="view" id="view-ham">
+    <div class="rawhead">
+      <div>
+        <h2 class="rawtitle">Ham Veri</h2>
+        <p class="rawsub">Tüm kart işlemleri, tarih ve kategori bazında. Kategori ve tutar hücreleri <b>düzenlenebilir</b> — değişiklikler Dashboard'daki toplamları anında günceller.</p>
+      </div>
+      <div class="rawtools">
+        <button class="btn" id="btnReset">Değişiklikleri Sıfırla</button>
+        <button class="btn primary" id="btnExport">CSV Dışa Aktar</button>
+      </div>
+    </div>
+
+    <div class="livebar">
+      <div class="livebar-stat">Görüntülenen toplam <b id="liveTotal">0 TL</b></div>
+      <div class="livebar-stat"><span id="liveCount">0</span> işlem</div>
+      <div class="livebar-hint">Değişiklikler yalnızca bu tarayıcı oturumunda geçerlidir, dosyaya kaydedilmez.</div>
+    </div>
+    <div class="tablewrap" id="tableWrap">
+      <table class="raw">
+        <thead>
+          <tr>
+            <th style="width:90px;">Tarih</th>
+            <th>Açıklama</th>
+            <th style="width:130px;">Kart</th>
+            <th style="width:180px;">Kategori</th>
+            <th style="width:120px;text-align:right;">Tutar (TL)</th>
+            <th style="width:60px;">Ay</th>
+          </tr>
+        </thead>
+        <tbody id="rawTableBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ============ VERİ GİRİŞİ VIEW ============ -->
+  <div class="view" id="view-giris">
+    <div class="rawhead">
+      <div>
+        <h2 class="rawtitle">Veri Girişi</h2>
+        <p class="rawsub">Aylık_Harcama_Takibi.xlsx dosyanızı yükleyin — "<b>[Ay Yılı] Detay</b>" adlı her sayfa otomatik olarak ayrı bir ay olarak tanınır. Alternatif olarak tek tek işlem de ekleyebilirsiniz.</p>
+      </div>
+    </div>
+
+    <div class="dropzone" id="dropzone">
+      <input type="file" id="fileInput" accept=".xlsx,.xls" hidden>
+      <div class="dropzone-icon">⇪</div>
+      <div class="dropzone-text">Excel dosyasını buraya sürükleyin <span>veya tıklayıp seçin</span></div>
+      <div class="dropzone-hint">.xlsx — "Ay Yılı Detay" adlı sayfalar okunur (ör. "Ağustos 2026 Detay")</div>
+    </div>
+    <div class="upload-status" id="uploadStatus"></div>
+
+    <div class="section-head" style="margin-top:48px;">
+      <h2 class="section-title">Yüklü Aylar</h2>
+      <span class="section-note" id="monthsNote">2 ay</span>
+    </div>
+    <div id="monthsList" class="months-list"></div>
+
+    <div class="section-head" style="margin-top:48px;">
+      <h2 class="section-title">Tek İşlem Ekle</h2>
+      <span class="section-note">manuel giriş</span>
+    </div>
+    <form class="entry-form" id="entryForm">
+      <div class="field">
+        <label>Ay</label>
+        <select id="f_ay"></select>
+      </div>
+      <div class="field">
+        <label>Yeni ay adı (opsiyonel)</label>
+        <input type="text" id="f_yeniay" placeholder="ör. Ağustos 2026">
+      </div>
+      <div class="field">
+        <label>Tarih</label>
+        <input type="text" id="f_tarih" placeholder="gg.aa.yyyy">
+      </div>
+      <div class="field wide">
+        <label>Açıklama</label>
+        <input type="text" id="f_aciklama" placeholder="işletme / işlem adı" required>
+      </div>
+      <div class="field">
+        <label>Kart</label>
+        <input type="text" id="f_kart" placeholder="ör. Yapı Kredi Crystal">
+      </div>
+      <div class="field">
+        <label>Kategori</label>
+        <select id="f_kategori"></select>
+      </div>
+      <div class="field">
+        <label>Tutar (TL)</label>
+        <input type="number" step="0.01" id="f_tutar" placeholder="0.00" required>
+      </div>
+      <div class="field checkbox">
+        <label><input type="checkbox" id="f_dahil" checked> Toplama dahil et</label>
+      </div>
+      <div class="field">
+        <button type="submit" class="btn primary" style="width:100%;">İşlemi Ekle</button>
+      </div>
+    </form>
+  </div>
+
+</div>
+
+<button class="fab" id="scrollFab" title="Kaydır">↓</button>
+
+<script>
+/* ============ VERİ / DURUM ============ */
+let CATS = ["Yeme-İçme","Market/Gıda","Ulaşım","BES/Emeklilik/Sigorta","Vergi","Sağlık","Online Alışveriş",
+"Seyahat/Konaklama","Bağış","Giyim/Aksesuar","Vale/Park","Abonelik","SPA","Akaryakıt","Kişisel Bakım",
+"Oto Bakım","Diğer/Belirsiz","Elektronik","Eğitim (Passthrough)"];
+
+const HAZIRAN_RAW = [{"tarih": "28.05.2026", "aciklama": "YARD TURİZM A.Ş.", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": 1700.0, "dahil": "Evet", "not": ""}, {"tarih": "28.05.2026", "aciklama": "ELİT VALE PARK VE GIDA", "kart": "Yapı Kredi Crystal", "kategori": "Vale/Park", "tutar": 200.0, "dahil": "Evet", "not": ""}, {"tarih": "29.05.2026", "aciklama": "Restoran %5 indirimi", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": -51.18, "dahil": "Evet", "not": ""}, {"tarih": "29.05.2026", "aciklama": "Restoran %5 indirimi", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": -151.75, "dahil": "Evet", "not": ""}, {"tarih": "29.05.2026", "aciklama": "YARD TURİZM A.Ş.", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": 1023.5, "dahil": "Evet", "not": ""}, {"tarih": "29.05.2026", "aciklama": "ELİT VALE PARK VE GIDA", "kart": "Yapı Kredi Crystal", "kategori": "Vale/Park", "tutar": 400.0, "dahil": "Evet", "not": ""}, {"tarih": "29.05.2026", "aciklama": "BARAN KEBAP ET MANGAL", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": 3035.0, "dahil": "Evet", "not": ""}, {"tarih": "30.05.2026", "aciklama": "Restoran %5 indirimi", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": -62.7, "dahil": "Evet", "not": ""}, {"tarih": "30.05.2026", "aciklama": "APPLE.COM/BILL", "kart": "Yapı Kredi Crystal", "kategori": "Abonelik", "tutar": 104.99, "dahil": "Evet", "not": ""}, {"tarih": "30.05.2026", "aciklama": "YARD TURİZM A.Ş.", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": 1254.0, "dahil": "Evet", "not": ""}, {"tarih": "30.05.2026", "aciklama": "ELİT VALE PARK VE GIDA", "kart": "Yapı Kredi Crystal", "kategori": "Vale/Park", "tutar": 200.0, "dahil": "Evet", "not": ""}, {"tarih": "31.05.2026", "aciklama": "Restoran %5 indirimi", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": -101.2, "dahil": "Evet", "not": ""}, {"tarih": "31.05.2026", "aciklama": "YARD TURİZM A.Ş.", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": 2024.0, "dahil": "Evet", "not": ""}, {"tarih": "31.05.2026", "aciklama": "ELİT VALE PARK VE GIDA", "kart": "Yapı Kredi Crystal", "kategori": "Vale/Park", "tutar": 200.0, "dahil": "Evet", "not": ""}, {"tarih": "01.06.2026", "aciklama": "Restoran %5 indirimi", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": -97.0, "dahil": "Evet", "not": ""}, {"tarih": "01.06.2026", "aciklama": "Restoran %5 indirimi", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": -750.0, "dahil": "Evet", "not": ""}, {"tarih": "01.06.2026", "aciklama": "YARD TURİZM A.Ş.", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": 1940.0, "dahil": "Evet", "not": ""}, {"tarih": "01.06.2026", "aciklama": "ELİT VALE PARK VE GIDA", "kart": "Yapı Kredi Crystal", "kategori": "Vale/Park", "tutar": 200.0, "dahil": "Evet", "not": ""}, {"tarih": "01.06.2026", "aciklama": "VADİ ARNAVUTKÖY", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": 29764.0, "dahil": "Evet", "not": ""}, {"tarih": "02.06.2026", "aciklama": "Restoran %5 indirimi", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": -58.5, "dahil": "Evet", "not": ""}, {"tarih": "02.06.2026", "aciklama": "Restoran %5 indirimi", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": -110.4, "dahil": "Evet", "not": ""}, {"tarih": "02.06.2026", "aciklama": "ZERAFET ET", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": 1170.0, "dahil": "Evet", "not": ""}, {"tarih": "02.06.2026", "aciklama": "YARD TURİZM A.Ş.", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": 2208.0, "dahil": "Evet", "not": ""}, {"tarih": "02.06.2026", "aciklama": "ELİT VALE PARK VE GIDA", "kart": "Yapı Kredi Crystal", "kategori": "Vale/Park", "tutar": 200.0, "dahil": "Evet", "not": ""}, {"tarih": "03.06.2026", "aciklama": "Restoran %5 indirimi", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": -53.63, "dahil": "Evet", "not": ""}, {"tarih": "03.06.2026", "aciklama": "APPLE.COM/BILL", "kart": "Yapı Kredi Crystal", "kategori": "Abonelik", "tutar": 799.99, "dahil": "Evet", "not": ""}, {"tarih": "03.06.2026", "aciklama": "BİTAKSİ", "kart": "Yapı Kredi Crystal", "kategori": "Ulaşım", "tutar": 1015.0, "dahil": "Evet", "not": ""}, {"tarih": "03.06.2026", "aciklama": "PARAM/BİTAKSİ GETİRBİ", "kart": "Yapı Kredi Crystal", "kategori": "Ulaşım", "tutar": 379.0, "dahil": "Evet", "not": ""}, {"tarih": "03.06.2026", "aciklama": "YARD TURİZM A.Ş.", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": 1072.5, "dahil": "Evet", "not": ""}, {"tarih": "03.06.2026", "aciklama": "MARTI TEKNOLOJİ", "kart": "Yapı Kredi Crystal", "kategori": "Ulaşım", "tutar": 50.0, "dahil": "Evet", "not": ""}, {"tarih": "03.06.2026", "aciklama": "MARTI TEKNOLOJİ", "kart": "Yapı Kredi Crystal", "kategori": "Ulaşım", "tutar": 21.92, "dahil": "Evet", "not": ""}, {"tarih": "04.06.2026", "aciklama": "YUKSEL PETROL URUNLERI", "kart": "Yapı Kredi Crystal", "kategori": "Akaryakıt", "tutar": 250.0, "dahil": "Evet", "not": ""}, {"tarih": "04.06.2026", "aciklama": "KANYON ECZANESİ", "kart": "Yapı Kredi Crystal", "kategori": "Sağlık", "tutar": 152.62, "dahil": "Evet", "not": ""}, {"tarih": "04.06.2026", "aciklama": "ASİL ERKEK KUAFÖRÜ", "kart": "Yapı Kredi Crystal", "kategori": "Kişisel Bakım", "tutar": 1200.0, "dahil": "Evet", "not": ""}, {"tarih": "04.06.2026", "aciklama": "BELBIM AS. ULASIM", "kart": "Yapı Kredi Crystal", "kategori": "Ulaşım", "tutar": 60.0, "dahil": "Evet", "not": ""}, {"tarih": "04.06.2026", "aciklama": "BELBIM AS. ULASIM", "kart": "Yapı Kredi Crystal", "kategori": "Ulaşım", "tutar": 60.0, "dahil": "Evet", "not": ""}, {"tarih": "05.06.2026", "aciklama": "Restoran %5 indirimi", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": -106.5, "dahil": "Evet", "not": ""}, {"tarih": "05.06.2026", "aciklama": "VADİ ARNAVUTKÖY", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": 2130.0, "dahil": "Evet", "not": ""}, {"tarih": "05.06.2026", "aciklama": "APPLE.COM/BILL", "kart": "Yapı Kredi Crystal", "kategori": "Abonelik", "tutar": 399.99, "dahil": "Evet", "not": ""}, {"tarih": "05.06.2026", "aciklama": "MONEYPAY *DIJITAL PLATFORM", "kart": "Yapı Kredi Crystal", "kategori": "Market/Gıda", "tutar": 1910.45, "dahil": "Evet", "not": ""}, {"tarih": "06.06.2026", "aciklama": "Restoran %5 indirimi", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": -80.5, "dahil": "Evet", "not": ""}, {"tarih": "06.06.2026", "aciklama": "VADİ ARNAVUTKÖY", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": 1610.0, "dahil": "Evet", "not": ""}, {"tarih": "06.06.2026", "aciklama": "PARAM/BİTAKSİ GETİRBİ", "kart": "Yapı Kredi Crystal", "kategori": "Ulaşım", "tutar": 950.0, "dahil": "Evet", "not": ""}, {"tarih": "06.06.2026", "aciklama": "YARD TURİZM A.Ş.", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": 575.0, "dahil": "Evet", "not": ""}, {"tarih": "06.06.2026", "aciklama": "ELİT VALE PARK VE GIDA", "kart": "Yapı Kredi Crystal", "kategori": "Vale/Park", "tutar": 200.0, "dahil": "Evet", "not": ""}, {"tarih": "07.06.2026", "aciklama": "Restoran %5 indirimi", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": -80.5, "dahil": "Evet", "not": ""}, {"tarih": "07.06.2026", "aciklama": "Restoran %5 indirimi", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": -121.28, "dahil": "Evet", "not": ""}, {"tarih": "07.06.2026", "aciklama": "Restoran %5 indirimi", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": -175.0, "dahil": "Evet", "not": ""}, {"tarih": "07.06.2026", "aciklama": "VADİ ARNAVUTKÖY", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": 1610.0, "dahil": "Evet", "not": ""}, {"tarih": "07.06.2026", "aciklama": "MOKAUNİTED/GETİR", "kart": "Yapı Kredi Crystal", "kategori": "Market/Gıda", "tutar": 2281.94, "dahil": "Evet", "not": ""}, {"tarih": "07.06.2026", "aciklama": "YARD TURİZM A.Ş.", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": 2425.5, "dahil": "Evet", "not": ""}, {"tarih": "07.06.2026", "aciklama": "ELİT VALE PARK VE GIDA", "kart": "Yapı Kredi Crystal", "kategori": "Vale/Park", "tutar": 400.0, "dahil": "Evet", "not": ""}, {"tarih": "07.06.2026", "aciklama": "MARTI TEKNOLOJİ", "kart": "Yapı Kredi Crystal", "kategori": "Ulaşım", "tutar": 50.0, "dahil": "Evet", "not": ""}, {"tarih": "07.06.2026", "aciklama": "MARTI TEKNOLOJİ", "kart": "Yapı Kredi Crystal", "kategori": "Ulaşım", "tutar": 57.88, "dahil": "Evet", "not": ""}, {"tarih": "07.06.2026", "aciklama": "EMRE MERMER OCAKBAŞI", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": 3500.0, "dahil": "Evet", "not": ""}, {"tarih": "08.06.2026", "aciklama": "Restoran %5 indirimi", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": -130.0, "dahil": "Evet", "not": ""}, {"tarih": "08.06.2026", "aciklama": "Restoran %5 indirimi", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": -117.5, "dahil": "Evet", "not": ""}, {"tarih": "08.06.2026", "aciklama": "VADİ ARNAVUTKÖY", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": 2600.0, "dahil": "Evet", "not": ""}, {"tarih": "08.06.2026", "aciklama": "ALLIANZ YE BES KATKI", "kart": "Yapı Kredi Crystal", "kategori": "BES/Emeklilik/Sigorta", "tutar": 10000.0, "dahil": "Evet", "not": ""}, {"tarih": "08.06.2026", "aciklama": "SUPPLEMENTLER.COM", "kart": "Yapı Kredi Crystal", "kategori": "Sağlık", "tutar": 744.0, "dahil": "Evet", "not": ""}, {"tarih": "08.06.2026", "aciklama": "YARD TURİZM A.Ş.", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": 2350.0, "dahil": "Evet", "not": ""}, {"tarih": "08.06.2026", "aciklama": "ELİT VALE PARK VE GIDA", "kart": "Yapı Kredi Crystal", "kategori": "Vale/Park", "tutar": 200.0, "dahil": "Evet", "not": ""}, {"tarih": "09.06.2026", "aciklama": "ELİT VALE PARK VE GIDA", "kart": "Yapı Kredi Crystal", "kategori": "Vale/Park", "tutar": 400.0, "dahil": "Evet", "not": ""}, {"tarih": "10.06.2026", "aciklama": "ELİT VALE PARK VE GIDA", "kart": "Yapı Kredi Crystal", "kategori": "Vale/Park", "tutar": 200.0, "dahil": "Evet", "not": ""}, {"tarih": "11.06.2026", "aciklama": "Otopark %50 indirim", "kart": "Yapı Kredi Crystal", "kategori": "Ulaşım", "tutar": -300.0, "dahil": "Evet", "not": ""}, {"tarih": "11.06.2026", "aciklama": "Restoran %5 indirimi", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": -46.58, "dahil": "Evet", "not": ""}, {"tarih": "11.06.2026", "aciklama": "AS VALE", "kart": "Yapı Kredi Crystal", "kategori": "Vale/Park", "tutar": 600.0, "dahil": "Evet", "not": ""}, {"tarih": "11.06.2026", "aciklama": "EMİNE ZİNNUR KILIÇ", "kart": "Yapı Kredi Crystal", "kategori": "Sağlık", "tutar": 12000.0, "dahil": "Evet", "not": ""}, {"tarih": "11.06.2026", "aciklama": "YARD TURİZM A.Ş.", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": 931.5, "dahil": "Evet", "not": ""}, {"tarih": "11.06.2026", "aciklama": "ELİT VALE PARK VE GIDA", "kart": "Yapı Kredi Crystal", "kategori": "Vale/Park", "tutar": 200.0, "dahil": "Evet", "not": ""}, {"tarih": "11.06.2026", "aciklama": "MOKAUNİTED/GETİR", "kart": "Yapı Kredi Crystal", "kategori": "Market/Gıda", "tutar": 1058.44, "dahil": "Evet", "not": ""}, {"tarih": "12.06.2026", "aciklama": "CK BOĞAZİÇİ PERAK.SAT.A.Ş", "kart": "Yapı Kredi Crystal", "kategori": "Abonelik", "tutar": 658.81, "dahil": "Evet", "not": ""}, {"tarih": "14.06.2026", "aciklama": "YARD TURİZM A.Ş.", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": 575.0, "dahil": "Evet", "not": ""}, {"tarih": "14.06.2026", "aciklama": "YARD TURİZM A.Ş.", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": 1501.5, "dahil": "Evet", "not": ""}, {"tarih": "14.06.2026", "aciklama": "ELİT VALE PARK VE GIDA", "kart": "Yapı Kredi Crystal", "kategori": "Vale/Park", "tutar": 200.0, "dahil": "Evet", "not": ""}, {"tarih": "14.06.2026", "aciklama": "ULUS BOLDY", "kart": "Yapı Kredi Crystal", "kategori": "Market/Gıda", "tutar": 1402.65, "dahil": "Evet", "not": ""}, {"tarih": "15.06.2026", "aciklama": "SUPPLEMENTLER.COM", "kart": "Yapı Kredi Crystal", "kategori": "Sağlık", "tutar": 300.0, "dahil": "Evet", "not": ""}, {"tarih": "15.06.2026", "aciklama": "ASİL ERKEK KUAFÖRÜ", "kart": "Yapı Kredi Crystal", "kategori": "Kişisel Bakım", "tutar": 1200.0, "dahil": "Evet", "not": ""}, {"tarih": "15.06.2026", "aciklama": "ELİT VALE PARK VE GIDA", "kart": "Yapı Kredi Crystal", "kategori": "Vale/Park", "tutar": 200.0, "dahil": "Evet", "not": ""}, {"tarih": "16.06.2026", "aciklama": "Restoran %5 indirimi", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": -109.25, "dahil": "Evet", "not": ""}, {"tarih": "16.06.2026", "aciklama": "Restoran %5 indirimi", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": -285.0, "dahil": "Evet", "not": ""}, {"tarih": "16.06.2026", "aciklama": "OPET KAMAN DENİZCİLİK", "kart": "Yapı Kredi Crystal", "kategori": "Akaryakıt", "tutar": 3931.15, "dahil": "Evet", "not": ""}, {"tarih": "16.06.2026", "aciklama": "YARD TURİZM A.Ş.", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": 2185.0, "dahil": "Evet", "not": ""}, {"tarih": "16.06.2026", "aciklama": "YARD TURİZM A.Ş.", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": 2986.5, "dahil": "Evet", "not": ""}, {"tarih": "16.06.2026", "aciklama": "VADİ ARNAVUTKÖY", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": 5700.0, "dahil": "Evet", "not": ""}, {"tarih": "17.06.2026", "aciklama": "DIKEY VITAMIN KOZMETIK", "kart": "Yapı Kredi Crystal", "kategori": "Sağlık", "tutar": 899.0, "dahil": "Evet", "not": ""}, {"tarih": "17.06.2026", "aciklama": "ELİT VALE PARK VE GIDA", "kart": "Yapı Kredi Crystal", "kategori": "Vale/Park", "tutar": 200.0, "dahil": "Evet", "not": ""}, {"tarih": "18.06.2026", "aciklama": "Restoran %5 indirimi", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": -61.6, "dahil": "Evet", "not": ""}, {"tarih": "18.06.2026", "aciklama": "UMUDA KOŞANLAR DERNEĞİ", "kart": "Yapı Kredi Crystal", "kategori": "Bağış", "tutar": 10000.0, "dahil": "Evet", "not": ""}, {"tarih": "18.06.2026", "aciklama": "NİŞANTAŞI VALE HİZMETLERİ", "kart": "Yapı Kredi Crystal", "kategori": "Vale/Park", "tutar": 400.0, "dahil": "Evet", "not": ""}, {"tarih": "18.06.2026", "aciklama": "YARD TURİZM A.Ş.", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": 1232.0, "dahil": "Evet", "not": ""}, {"tarih": "18.06.2026", "aciklama": "ELİT VALE PARK VE GIDA", "kart": "Yapı Kredi Crystal", "kategori": "Vale/Park", "tutar": 200.0, "dahil": "Evet", "not": ""}, {"tarih": "18.06.2026", "aciklama": "HILLSIDE CITY CLUB", "kart": "Yapı Kredi Crystal", "kategori": "Vale/Park", "tutar": 400.0, "dahil": "Evet", "not": ""}, {"tarih": "19.06.2026", "aciklama": "Restoran %5 indirimi", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": -55.55, "dahil": "Evet", "not": ""}, {"tarih": "19.06.2026", "aciklama": "Restoran %5 indirimi", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": -61.21, "dahil": "Evet", "not": ""}, {"tarih": "19.06.2026", "aciklama": "MOKA UNITED/GETİR", "kart": "Yapı Kredi Crystal", "kategori": "Market/Gıda", "tutar": 2367.88, "dahil": "Evet", "not": ""}, {"tarih": "19.06.2026", "aciklama": "YARD TURİZM A.Ş.", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": 575.0, "dahil": "Evet", "not": ""}, {"tarih": "19.06.2026", "aciklama": "YARD TURİZM A.Ş.", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": 1111.0, "dahil": "Evet", "not": ""}, {"tarih": "19.06.2026", "aciklama": "ELİT VALE PARK VE GIDA", "kart": "Yapı Kredi Crystal", "kategori": "Vale/Park", "tutar": 250.0, "dahil": "Evet", "not": ""}, {"tarih": "19.06.2026", "aciklama": "VADİ ARNAVUTKÖY", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": 2360.0, "dahil": "Evet", "not": ""}, {"tarih": "20.06.2026", "aciklama": "Anlaşmalı otel/rest. %20 indirim", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": -904.0, "dahil": "Evet", "not": ""}, {"tarih": "20.06.2026", "aciklama": "Otopark %50 indirim", "kart": "Yapı Kredi Crystal", "kategori": "Ulaşım", "tutar": -300.0, "dahil": "Evet", "not": ""}, {"tarih": "20.06.2026", "aciklama": "Otopark %50 indirim", "kart": "Yapı Kredi Crystal", "kategori": "Ulaşım", "tutar": -250.0, "dahil": "Evet", "not": ""}, {"tarih": "20.06.2026", "aciklama": "MANGERIE", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": 4520.0, "dahil": "Evet", "not": ""}, {"tarih": "20.06.2026", "aciklama": "SERDAL DOĞAN", "kart": "Yapı Kredi Crystal", "kategori": "Vale/Park", "tutar": 600.0, "dahil": "Evet", "not": ""}, {"tarih": "20.06.2026", "aciklama": "ELİT VALE PARK VE GIDA", "kart": "Yapı Kredi Crystal", "kategori": "Vale/Park", "tutar": 500.0, "dahil": "Evet", "not": ""}, {"tarih": "20.06.2026", "aciklama": "ARBEN YAPI TELEK. ELK.", "kart": "Yapı Kredi Crystal", "kategori": "SPA", "tutar": 4500.0, "dahil": "Evet", "not": ""}, {"tarih": "21.06.2026", "aciklama": "Otopark %50 indirim", "kart": "Yapı Kredi Crystal", "kategori": "Ulaşım", "tutar": -150.0, "dahil": "Evet", "not": ""}, {"tarih": "21.06.2026", "aciklama": "ESLAB KARTAL", "kart": "Yapı Kredi Crystal", "kategori": "Diğer/Belirsiz", "tutar": 215.0, "dahil": "Evet", "not": ""}, {"tarih": "21.06.2026", "aciklama": "SERDAL DOĞAN", "kart": "Yapı Kredi Crystal", "kategori": "Vale/Park", "tutar": 600.0, "dahil": "Evet", "not": ""}, {"tarih": "21.06.2026", "aciklama": "YARD TURİZM A.Ş.", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": 1000.0, "dahil": "Evet", "not": ""}, {"tarih": "21.06.2026", "aciklama": "ELİT VALE PARK VE GIDA", "kart": "Yapı Kredi Crystal", "kategori": "Vale/Park", "tutar": 250.0, "dahil": "Evet", "not": ""}, {"tarih": "22.06.2026", "aciklama": "IYZICO *AMZNPRIMETR", "kart": "Yapı Kredi Crystal", "kategori": "Abonelik", "tutar": 69.9, "dahil": "Evet", "not": ""}, {"tarih": "22.06.2026", "aciklama": "ELİT VALE PARK VE GIDA", "kart": "Yapı Kredi Crystal", "kategori": "Vale/Park", "tutar": 250.0, "dahil": "Evet", "not": ""}, {"tarih": "23.06.2026", "aciklama": "SPOTIFY", "kart": "Yapı Kredi Crystal", "kategori": "Abonelik", "tutar": 135.0, "dahil": "Evet", "not": ""}, {"tarih": "23.06.2026", "aciklama": "ELİT VALE PARK VE GIDA", "kart": "Yapı Kredi Crystal", "kategori": "Vale/Park", "tutar": 250.0, "dahil": "Evet", "not": ""}, {"tarih": "23.06.2026", "aciklama": "MY GRUP", "kart": "Yapı Kredi Crystal", "kategori": "Diğer/Belirsiz", "tutar": 350.0, "dahil": "Evet", "not": ""}, {"tarih": "24.06.2026", "aciklama": "ELİT VALE PARK VE GIDA", "kart": "Yapı Kredi Crystal", "kategori": "Vale/Park", "tutar": 250.0, "dahil": "Evet", "not": ""}, {"tarih": "25.06.2026", "aciklama": "VADİ ARNAVUTKÖY", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": 3050.0, "dahil": "Evet", "not": ""}, {"tarih": "26.06.2026", "aciklama": "HGS YÜKLEME", "kart": "Yapı Kredi Crystal", "kategori": "Ulaşım", "tutar": 330.0, "dahil": "Evet", "not": ""}, {"tarih": "26.06.2026", "aciklama": "HGS TALİMAT", "kart": "Yapı Kredi Crystal", "kategori": "Ulaşım", "tutar": 500.0, "dahil": "Evet", "not": ""}, {"tarih": "26.06.2026", "aciklama": "EMİRGAN SÜTİŞ", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": 3400.0, "dahil": "Evet", "not": ""}, {"tarih": "26.06.2026", "aciklama": "İSPARK", "kart": "Yapı Kredi Crystal", "kategori": "Ulaşım", "tutar": 120.0, "dahil": "Evet", "not": ""}, {"tarih": "26.06.2026", "aciklama": "YARD TURİZM A.Ş.", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": 869.0, "dahil": "Evet", "not": ""}, {"tarih": "26.06.2026", "aciklama": "ELİT VALE PARK VE GIDA", "kart": "Yapı Kredi Crystal", "kategori": "Vale/Park", "tutar": 250.0, "dahil": "Evet", "not": ""}, {"tarih": "27.06.2026", "aciklama": "CEMİLE SULTAN KORUSU", "kart": "Yapı Kredi Crystal", "kategori": "Ulaşım", "tutar": 250.0, "dahil": "Evet", "not": "Otopark"}, {"tarih": "27.06.2026", "aciklama": "YARD TURİZM A.Ş.", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": 1804.0, "dahil": "Evet", "not": ""}, {"tarih": "27.06.2026", "aciklama": "ELİT VALE PARK VE GIDA", "kart": "Yapı Kredi Crystal", "kategori": "Vale/Park", "tutar": 250.0, "dahil": "Evet", "not": ""}, {"tarih": "28.06.2026", "aciklama": "MACROCENTER NİSPETİYE", "kart": "Yapı Kredi Crystal", "kategori": "Market/Gıda", "tutar": 1548.75, "dahil": "Evet", "not": ""}, {"tarih": "08.06.2026", "aciklama": "HEPSIPAY *HEPSIBURADA (iade, 1. taksit karşılığı)", "kart": "Yapı Kredi Crystal", "kategori": "Online Alışveriş", "tutar": -3591.65, "dahil": "Evet", "not": ""}, {"tarih": "24.01.2026", "aciklama": "BEYMEN CLUB (6/6 taksit)", "kart": "Yapı Kredi Crystal", "kategori": "Giyim/Aksesuar", "tutar": 1658.33, "dahil": "Evet", "not": "9.950 TL'lik işlemin son taksidi"}, {"tarih": "15.04.2026", "aciklama": "OTOMOTİV LASTİKLERİ (3/6 taksit)", "kart": "Yapı Kredi Crystal", "kategori": "Oto Bakım", "tutar": 1000.0, "dahil": "Evet", "not": "6.000 TL'lik işlemin 3. taksidi"}, {"tarih": "06.05.2026", "aciklama": "HEPSIPAY *HEPSIBURADA (2/9 taksit)", "kart": "Yapı Kredi Crystal", "kategori": "Online Alışveriş", "tutar": 3431.33, "dahil": "Evet", "not": "30.881,96 TL'lik işlem"}, {"tarih": "06.05.2026", "aciklama": "HEPSIPAY *HEPSIBURADA (2/6 taksit)", "kart": "Yapı Kredi Crystal", "kategori": "Online Alışveriş", "tutar": 1920.65, "dahil": "Evet", "not": "11.523,90 TL'lik işlem"}, {"tarih": "10.05.2026", "aciklama": "HEPSIPAY *HEPSIBURADA (2/3 taksit)", "kart": "Yapı Kredi Crystal", "kategori": "Online Alışveriş", "tutar": 1126.9, "dahil": "Evet", "not": "3.380,70 TL'lik işlem"}, {"tarih": "16.05.2026", "aciklama": "HEPSIPAY *HEPSIBURADA (2/3 taksit)", "kart": "Yapı Kredi Crystal", "kategori": "Online Alışveriş", "tutar": 490.94, "dahil": "Evet", "not": "1.472,81 TL'lik işlem"}, {"tarih": "16.05.2026", "aciklama": "HEPSIPAY *HEPSIBURADA (2/3 taksit)", "kart": "Yapı Kredi Crystal", "kategori": "Online Alışveriş", "tutar": 951.18, "dahil": "Evet", "not": "2.853,54 TL'lik işlem"}, {"tarih": "19.05.2026", "aciklama": "HEPSIPAY *HEPSIBURADA (2/6 taksit)", "kart": "Yapı Kredi Crystal", "kategori": "Online Alışveriş", "tutar": 3591.66, "dahil": "Evet", "not": "21.549,98 TL'lik işlem"}, {"tarih": "24.05.2026", "aciklama": "HEPSIPAY *HEPSIBURADA (2/3 taksit)", "kart": "Yapı Kredi Crystal", "kategori": "Online Alışveriş", "tutar": 469.47, "dahil": "Evet", "not": "1.408,40 TL'lik işlem"}, {"tarih": "31.05.2026", "aciklama": "IYZICO *FINEROOMLIVIBURSA (1/3 taksit)", "kart": "Yapı Kredi Crystal", "kategori": "Online Alışveriş", "tutar": 2953.0, "dahil": "Evet", "not": "8.859 TL'lik işlem"}, {"tarih": "08.06.2026", "aciklama": "HEPSIPAY *HEPSIBURADA (2/6 taksit iade)", "kart": "Yapı Kredi Crystal", "kategori": "Online Alışveriş", "tutar": -3591.65, "dahil": "Evet", "not": "21.549,90 TL'lik iadenin taksidi"}, {"tarih": "10.06.2026", "aciklama": "MOKAUNİTED/DERSSANAL (1/12 taksit)", "kart": "Yapı Kredi Crystal", "kategori": "Eğitim (Passthrough)", "tutar": 58333.37, "dahil": "Hayır", "not": "700.000 TL'lik eğitim yatırımı - passthrough, toplama dahil değil"}, {"tarih": "18.06.2026", "aciklama": "HEPSIPAY *HEPSIBURADA (1/6 taksit)", "kart": "Yapı Kredi Crystal", "kategori": "Online Alışveriş", "tutar": 1649.65, "dahil": "Evet", "not": "9.897,85 TL'lik işlem"}, {"tarih": "18.06.2026", "aciklama": "IYZICO *AMAZON.COM.T (1/3 taksit)", "kart": "Yapı Kredi Crystal", "kategori": "Online Alışveriş", "tutar": 1049.79, "dahil": "Evet", "not": "3.149,37 TL'lik işlem"}, {"tarih": "09.06.2026", "aciklama": "ELBET STEAKHOUSE (Selects %20 indirim)", "kart": "Garanti Amex Platinum", "kategori": "Yeme-İçme", "tutar": 3680.0, "dahil": "Evet", "not": ""}, {"tarih": "17.06.2026", "aciklama": "ELBET STEAKHOUSE (Selects %20 indirim)", "kart": "Garanti Amex Platinum", "kategori": "Yeme-İçme", "tutar": 2280.0, "dahil": "Evet", "not": ""}, {"tarih": "", "aciklama": "TRENDYOL MARKET", "kart": "Diğer Hesap/Kart", "kategori": "Market/Gıda", "tutar": 1050.0, "dahil": "Evet", "not": ""}, {"tarih": "", "aciklama": "TRENDYOL MARKET", "kart": "Diğer Hesap/Kart", "kategori": "Market/Gıda", "tutar": 1060.0, "dahil": "Evet", "not": ""}, {"tarih": "", "aciklama": "NAKİL VASITALARI VERGİSİ (MTV)", "kart": "Diğer Hesap/Kart", "kategori": "Vergi", "tutar": 4506.0, "dahil": "Evet", "not": ""}, {"tarih": "", "aciklama": "ÜÇEL DAYANIKLI TÜKETİM (4/6 taksit)", "kart": "Diğer Hesap/Kart", "kategori": "Elektronik", "tutar": 443.33, "dahil": "Evet", "not": ""}, {"tarih": "", "aciklama": "AKMERKEZ AVM MUDO CONCEPT (4/4 taksit)", "kart": "Diğer Hesap/Kart", "kategori": "Online Alışveriş", "tutar": 745.25, "dahil": "Evet", "not": "Ev/Dekorasyon - Online Alışveriş'e dahil edildi"}, {"tarih": "", "aciklama": "SUPERSTEP-İSTİNYE (2/4 taksit)", "kart": "Diğer Hesap/Kart", "kategori": "Giyim/Aksesuar", "tutar": 3324.75, "dahil": "Evet", "not": ""}, {"tarih": "", "aciklama": "TURKCELL FATURA", "kart": "Diğer Hesap/Kart", "kategori": "Abonelik", "tutar": 1327.0, "dahil": "Evet", "not": ""}, {"tarih": "", "aciklama": "ŞİŞLİ BELEDİYESİ (2/3 taksit)", "kart": "Diğer Hesap/Kart", "kategori": "Vergi", "tutar": 15816.88, "dahil": "Evet", "not": ""}, {"tarih": "", "aciklama": "QPAY (4/6 taksit)", "kart": "Diğer Hesap/Kart", "kategori": "BES/Emeklilik/Sigorta", "tutar": 6137.4, "dahil": "Evet", "not": ""}, {"tarih": "", "aciklama": "SUPERONLİNE İNTERNET", "kart": "Diğer Hesap/Kart", "kategori": "Abonelik", "tutar": 850.0, "dahil": "Evet", "not": ""}, {"tarih": "", "aciklama": "SUPERONLİNE İNTERNET", "kart": "Diğer Hesap/Kart", "kategori": "Abonelik", "tutar": 1297.8, "dahil": "Evet", "not": ""}, {"tarih": "", "aciklama": "TRENDYOL MARKET", "kart": "Diğer Hesap/Kart", "kategori": "Market/Gıda", "tutar": 1060.0, "dahil": "Evet", "not": ""}, {"tarih": "", "aciklama": "TRENDYOL.COM (2/3 taksit)", "kart": "Diğer Hesap/Kart", "kategori": "Market/Gıda", "tutar": 1426.33, "dahil": "Evet", "not": ""}, {"tarih": "", "aciklama": "G.E. EMEKLİLİK KATKISI", "kart": "Diğer Hesap/Kart", "kategori": "BES/Emeklilik/Sigorta", "tutar": 7500.0, "dahil": "Evet", "not": ""}, {"tarih": "", "aciklama": "IYZICO *AMAZON.COM.T (2/3 taksit)", "kart": "Diğer Hesap/Kart", "kategori": "Online Alışveriş", "tutar": 24236.0, "dahil": "Evet", "not": "Kaynak ekstrede 'Market' etiketli - Online Alışveriş'e taşındı"}, {"tarih": "", "aciklama": "TODTV.COM.TR (8/12 taksit)", "kart": "Diğer Hesap/Kart", "kategori": "Abonelik", "tutar": 199.0, "dahil": "Evet", "not": ""}, {"tarih": "", "aciklama": "NETFLIX.COM", "kart": "Diğer Hesap/Kart", "kategori": "Abonelik", "tutar": 379.99, "dahil": "Evet", "not": ""}, {"tarih": "", "aciklama": "YATAŞ-YATAK VE YORGAN (2/9 taksit)", "kart": "Diğer Hesap/Kart", "kategori": "Online Alışveriş", "tutar": 1488.81, "dahil": "Evet", "not": "Ev/Dekorasyon - Online Alışveriş'e dahil edildi"}, {"tarih": "", "aciklama": "TAN İNVEST (2/3 taksit)", "kart": "Diğer Hesap/Kart", "kategori": "Online Alışveriş", "tutar": 4014.42, "dahil": "Evet", "not": "Ev/Dekorasyon - Online Alışveriş'e dahil edildi"}, {"tarih": "", "aciklama": "TÜRKİYE SİGORTA (12/12 taksit)", "kart": "Diğer Hesap/Kart", "kategori": "BES/Emeklilik/Sigorta", "tutar": 1123.88, "dahil": "Evet", "not": ""}, {"tarih": "", "aciklama": "TKPAY *THY UÇAK BİLETİ", "kart": "Diğer Hesap/Kart", "kategori": "Ulaşım", "tutar": 23288.02, "dahil": "Evet", "not": ""}, {"tarih": "", "aciklama": "SUPERSTEP-İSTİNYE (2/4 taksit)", "kart": "Diğer Hesap/Kart", "kategori": "Giyim/Aksesuar", "tutar": 339.25, "dahil": "Evet", "not": ""}, {"tarih": "", "aciklama": "TAN İNVEST (2/3 taksit)", "kart": "Diğer Hesap/Kart", "kategori": "Online Alışveriş", "tutar": 2303.3, "dahil": "Evet", "not": "Ev/Dekorasyon - Online Alışveriş'e dahil edildi"}, {"tarih": "", "aciklama": "BARÇIN SPOR MALZEMELERİ (2/4 taksit)", "kart": "Diğer Hesap/Kart", "kategori": "Giyim/Aksesuar", "tutar": 4399.87, "dahil": "Evet", "not": ""}];
+const TEMMUZ_RAW = [{"tarih": "28.06.2026", "aciklama": "SERDAL DOĞAN", "kart": "Yapı Kredi Crystal", "kategori": "Vale/Park", "tutar": 600.0, "dahil": "Evet", "not": ""}, {"tarih": "28.06.2026", "aciklama": "ARBEN YAPI TELEK. ELK.", "kart": "Yapı Kredi Crystal", "kategori": "SPA", "tutar": 4500.0, "dahil": "Evet", "not": ""}, {"tarih": "28.06.2026", "aciklama": "BA MİMARLIK", "kart": "Yapı Kredi Crystal", "kategori": "Diğer/Belirsiz", "tutar": 200.0, "dahil": "Evet", "not": ""}, {"tarih": "28.06.2026", "aciklama": "ELİT VALE PARK VE GIDA", "kart": "Yapı Kredi Crystal", "kategori": "Vale/Park", "tutar": 250.0, "dahil": "Evet", "not": ""}, {"tarih": "28.06.2026", "aciklama": "KAMAN DENİZCİLİK", "kart": "Yapı Kredi Crystal", "kategori": "Akaryakıt", "tutar": 3960.97, "dahil": "Evet", "not": ""}, {"tarih": "29.06.2026", "aciklama": "PAYTR ÖD/KOÇ MEZUNLARI", "kart": "Yapı Kredi Crystal", "kategori": "Abonelik", "tutar": 1200.0, "dahil": "Evet", "not": "Koç Mezunları Derneği aidatı olabilir"}, {"tarih": "29.06.2026", "aciklama": "PAYCELL/GETİR1", "kart": "Yapı Kredi Crystal", "kategori": "Market/Gıda", "tutar": 1257.22, "dahil": "Evet", "not": ""}, {"tarih": "29.06.2026", "aciklama": "ELİT VALE PARK VE GIDA", "kart": "Yapı Kredi Crystal", "kategori": "Vale/Park", "tutar": 250.0, "dahil": "Evet", "not": ""}, {"tarih": "30.06.2026", "aciklama": "APPLE.COM/BILL", "kart": "Yapı Kredi Crystal", "kategori": "Abonelik", "tutar": 104.99, "dahil": "Evet", "not": ""}, {"tarih": "30.06.2026", "aciklama": "YARD TURİZM A.Ş.", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": 1078.0, "dahil": "Evet", "not": ""}, {"tarih": "30.06.2026", "aciklama": "ELİT VALE PARK VE GIDA", "kart": "Yapı Kredi Crystal", "kategori": "Vale/Park", "tutar": 250.0, "dahil": "Evet", "not": ""}, {"tarih": "01.07.2026", "aciklama": "Restoran %5 indirimi", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": -111.93, "dahil": "Evet", "not": ""}, {"tarih": "01.07.2026", "aciklama": "YARD TURİZM A.Ş.", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": 830.0, "dahil": "Evet", "not": ""}, {"tarih": "01.07.2026", "aciklama": "YARD TURİZM A.Ş.", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": 2238.5, "dahil": "Evet", "not": ""}, {"tarih": "02.07.2026", "aciklama": "Restoran %5 indirimi", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": -45.5, "dahil": "Evet", "not": ""}, {"tarih": "02.07.2026", "aciklama": "CK BOĞAZİÇİ PERAK.SAT.A.Ş", "kart": "Yapı Kredi Crystal", "kategori": "Abonelik", "tutar": 658.82, "dahil": "Evet", "not": ""}, {"tarih": "02.07.2026", "aciklama": "MASİFF AHSAP", "kart": "Yapı Kredi Crystal", "kategori": "Online Alışveriş", "tutar": 910.0, "dahil": "Evet", "not": "Ev/Dekorasyon - Online Alışveriş'e dahil edildi (varsayım)"}, {"tarih": "03.07.2026", "aciklama": "Restoran %5 indirimi", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": -40.5, "dahil": "Evet", "not": ""}, {"tarih": "03.07.2026", "aciklama": "APPLE.COM/BILL", "kart": "Yapı Kredi Crystal", "kategori": "Abonelik", "tutar": 799.99, "dahil": "Evet", "not": ""}, {"tarih": "03.07.2026", "aciklama": "HANEDAN GRUP OTOMOTİV", "kart": "Yapı Kredi Crystal", "kategori": "Oto Bakım", "tutar": 200.0, "dahil": "Evet", "not": ""}, {"tarih": "03.07.2026", "aciklama": "YARD TURİZM A.Ş.", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": 810.0, "dahil": "Evet", "not": ""}, {"tarih": "03.07.2026", "aciklama": "ELİT VALE PARK VE GIDA", "kart": "Yapı Kredi Crystal", "kategori": "Vale/Park", "tutar": 250.0, "dahil": "Evet", "not": ""}, {"tarih": "04.07.2026", "aciklama": "Anlaşmalı otel/rest. %20 indirim", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": -1405.0, "dahil": "Evet", "not": ""}, {"tarih": "04.07.2026", "aciklama": "HGS TALİMAT", "kart": "Yapı Kredi Crystal", "kategori": "Ulaşım", "tutar": 500.0, "dahil": "Evet", "not": ""}, {"tarih": "04.07.2026", "aciklama": "ELİT VALE PARK VE GIDA", "kart": "Yapı Kredi Crystal", "kategori": "Vale/Park", "tutar": 250.0, "dahil": "Evet", "not": ""}, {"tarih": "04.07.2026", "aciklama": "DA MARİO DA MARİO ETİLER", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": 7025.0, "dahil": "Evet", "not": ""}, {"tarih": "05.07.2026", "aciklama": "Restoran %5 indirimi", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": -53.9, "dahil": "Evet", "not": ""}, {"tarih": "05.07.2026", "aciklama": "APPLE.COM/BILL", "kart": "Yapı Kredi Crystal", "kategori": "Abonelik", "tutar": 399.99, "dahil": "Evet", "not": ""}, {"tarih": "05.07.2026", "aciklama": "YARD TURİZM A.Ş.", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": 1078.0, "dahil": "Evet", "not": ""}, {"tarih": "06.07.2026", "aciklama": "Restoran %5 indirimi", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": -9.63, "dahil": "Evet", "not": ""}, {"tarih": "06.07.2026", "aciklama": "Restoran %5 indirimi", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": -94.0, "dahil": "Evet", "not": ""}, {"tarih": "06.07.2026", "aciklama": "ASİL ERKEK KUAFÖRÜ", "kart": "Yapı Kredi Crystal", "kategori": "Kişisel Bakım", "tutar": 1200.0, "dahil": "Evet", "not": ""}, {"tarih": "06.07.2026", "aciklama": "BOLDY METROCITY", "kart": "Yapı Kredi Crystal", "kategori": "Market/Gıda", "tutar": 432.42, "dahil": "Evet", "not": ""}, {"tarih": "06.07.2026", "aciklama": "YARD TURİZM A.Ş.", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": 192.5, "dahil": "Evet", "not": ""}, {"tarih": "06.07.2026", "aciklama": "YARD TURİZM A.Ş.", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": 1625.0, "dahil": "Evet", "not": ""}, {"tarih": "06.07.2026", "aciklama": "ELİT VALE PARK VE GIDA", "kart": "Yapı Kredi Crystal", "kategori": "Vale/Park", "tutar": 250.0, "dahil": "Evet", "not": ""}, {"tarih": "06.07.2026", "aciklama": "VADİ ARNAVUTKÖY", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": 1880.0, "dahil": "Evet", "not": ""}, {"tarih": "07.07.2026", "aciklama": "Restoran %5 indirimi", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": -75.0, "dahil": "Evet", "not": ""}, {"tarih": "07.07.2026", "aciklama": "ELİT VALE PARK VE GIDA", "kart": "Yapı Kredi Crystal", "kategori": "Vale/Park", "tutar": 250.0, "dahil": "Evet", "not": ""}, {"tarih": "07.07.2026", "aciklama": "YARD TURİZM A.Ş.", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": 1500.0, "dahil": "Evet", "not": ""}, {"tarih": "07.07.2026", "aciklama": "ELİT VALE PARK VE GIDA", "kart": "Yapı Kredi Crystal", "kategori": "Vale/Park", "tutar": 250.0, "dahil": "Evet", "not": ""}, {"tarih": "08.07.2026", "aciklama": "ELİT VALE PARK VE GIDA", "kart": "Yapı Kredi Crystal", "kategori": "Vale/Park", "tutar": 250.0, "dahil": "Evet", "not": ""}, {"tarih": "09.07.2026", "aciklama": "Anlaşmalı otel/rest. %20 indirim", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": -1300.0, "dahil": "Evet", "not": ""}, {"tarih": "09.07.2026", "aciklama": "Otopark %50 indirim", "kart": "Yapı Kredi Crystal", "kategori": "Ulaşım", "tutar": -250.0, "dahil": "Evet", "not": ""}, {"tarih": "09.07.2026", "aciklama": "BALIKÇI A TAYSAN İHR. PAZ", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": 6500.0, "dahil": "Evet", "not": ""}, {"tarih": "09.07.2026", "aciklama": "ELİT VALE PARK VE GIDA", "kart": "Yapı Kredi Crystal", "kategori": "Vale/Park", "tutar": 500.0, "dahil": "Evet", "not": ""}, {"tarih": "10.07.2026", "aciklama": "Restoran %5 indirimi", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": -139.0, "dahil": "Evet", "not": ""}, {"tarih": "10.07.2026", "aciklama": "Restoran %5 indirimi", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": -22.5, "dahil": "Evet", "not": ""}, {"tarih": "10.07.2026", "aciklama": "Restoran %5 indirimi", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": -15.25, "dahil": "Evet", "not": ""}, {"tarih": "10.07.2026", "aciklama": "IYZICO *PARIBUCINEVE", "kart": "Yapı Kredi Crystal", "kategori": "Diğer/Belirsiz", "tutar": 175.8, "dahil": "Evet", "not": "Belirsiz - aynı dönemde büyük Worldpuan iadesi de var"}, {"tarih": "10.07.2026", "aciklama": "EMİRGAN SÜTİŞ", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": 2780.0, "dahil": "Evet", "not": ""}, {"tarih": "10.07.2026", "aciklama": "BARHAL GIDA", "kart": "Yapı Kredi Crystal", "kategori": "Vale/Park", "tutar": 450.0, "dahil": "Evet", "not": "İşlem adında 'OTOPARK' geçiyor ama restoran işletmesi olarak değerlendirildi"}, {"tarih": "10.07.2026", "aciklama": "YARD TURİZM A.Ş.", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": 305.0, "dahil": "Evet", "not": ""}, {"tarih": "10.07.2026", "aciklama": "YARD TURİZM A.Ş.", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": 1743.5, "dahil": "Evet", "not": ""}, {"tarih": "10.07.2026", "aciklama": "ELİT VALE PARK VE GIDA", "kart": "Yapı Kredi Crystal", "kategori": "Vale/Park", "tutar": 250.0, "dahil": "Evet", "not": ""}, {"tarih": "11.07.2026", "aciklama": "Restoran %5 indirimi", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": -65.0, "dahil": "Evet", "not": ""}, {"tarih": "11.07.2026", "aciklama": "Otopark %50 indirim", "kart": "Yapı Kredi Crystal", "kategori": "Ulaşım", "tutar": -300.0, "dahil": "Evet", "not": ""}, {"tarih": "11.07.2026", "aciklama": "Restoran %5 indirimi", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": -51.15, "dahil": "Evet", "not": ""}, {"tarih": "11.07.2026", "aciklama": "CVP GIDA TİCARET", "kart": "Yapı Kredi Crystal", "kategori": "Market/Gıda", "tutar": 1300.0, "dahil": "Evet", "not": ""}, {"tarih": "11.07.2026", "aciklama": "SERDAL DOĞAN", "kart": "Yapı Kredi Crystal", "kategori": "Vale/Park", "tutar": 600.0, "dahil": "Evet", "not": ""}, {"tarih": "11.07.2026", "aciklama": "İSPARK GENEL MÜDÜRLÜĞÜ", "kart": "Yapı Kredi Crystal", "kategori": "Ulaşım", "tutar": 300.0, "dahil": "Evet", "not": ""}, {"tarih": "11.07.2026", "aciklama": "YARD TURİZM A.Ş.", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": 1023.0, "dahil": "Evet", "not": ""}, {"tarih": "11.07.2026", "aciklama": "ELİT VALE PARK VE GIDA", "kart": "Yapı Kredi Crystal", "kategori": "Vale/Park", "tutar": 250.0, "dahil": "Evet", "not": ""}, {"tarih": "11.07.2026", "aciklama": "GETİR PERAKENDE LOJİSTİK", "kart": "Yapı Kredi Crystal", "kategori": "Market/Gıda", "tutar": 1647.73, "dahil": "Evet", "not": ""}, {"tarih": "12.07.2026", "aciklama": "Restoran %5 indirimi", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": -88.1, "dahil": "Evet", "not": ""}, {"tarih": "12.07.2026", "aciklama": "MEHMETÇİK VAKFI", "kart": "Yapı Kredi Crystal", "kategori": "Akaryakıt", "tutar": 4360.0, "dahil": "Evet", "not": ""}, {"tarih": "12.07.2026", "aciklama": "YARD TURİZM A.Ş.", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": 1762.0, "dahil": "Evet", "not": ""}, {"tarih": "12.07.2026", "aciklama": "ELİT VALE PARK VE GIDA", "kart": "Yapı Kredi Crystal", "kategori": "Vale/Park", "tutar": 250.0, "dahil": "Evet", "not": ""}, {"tarih": "13.07.2026", "aciklama": "CK BOĞAZİÇİ PERAK.SAT.A.Ş", "kart": "Yapı Kredi Crystal", "kategori": "Abonelik", "tutar": 650.0, "dahil": "Evet", "not": ""}, {"tarih": "13.07.2026", "aciklama": "ELİT VALE PARK VE GIDA", "kart": "Yapı Kredi Crystal", "kategori": "Vale/Park", "tutar": 250.0, "dahil": "Evet", "not": ""}, {"tarih": "14.07.2026", "aciklama": "ELİT VALE PARK VE GIDA", "kart": "Yapı Kredi Crystal", "kategori": "Vale/Park", "tutar": 250.0, "dahil": "Evet", "not": ""}, {"tarih": "15.07.2026", "aciklama": "Restoran %5 indirimi", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": -72.0, "dahil": "Evet", "not": ""}, {"tarih": "15.07.2026", "aciklama": "Restoran %5 indirimi", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": -77.91, "dahil": "Evet", "not": ""}, {"tarih": "15.07.2026", "aciklama": "NİNDA BEBEK", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": 1440.0, "dahil": "Evet", "not": ""}, {"tarih": "15.07.2026", "aciklama": "YARD TURİZM A.Ş.", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": 1558.25, "dahil": "Evet", "not": ""}, {"tarih": "15.07.2026", "aciklama": "ELİT VALE PARK VE GIDA", "kart": "Yapı Kredi Crystal", "kategori": "Vale/Park", "tutar": 250.0, "dahil": "Evet", "not": ""}, {"tarih": "16.07.2026", "aciklama": "Restoran %5 indirimi", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": -139.75, "dahil": "Evet", "not": ""}, {"tarih": "16.07.2026", "aciklama": "POZY GIDA A.Ş.", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": 2795.0, "dahil": "Evet", "not": ""}, {"tarih": "16.07.2026", "aciklama": "ELİT VALE PARK VE GIDA", "kart": "Yapı Kredi Crystal", "kategori": "Vale/Park", "tutar": 250.0, "dahil": "Evet", "not": ""}, {"tarih": "17.07.2026", "aciklama": "Restoran %5 indirimi", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": -69.85, "dahil": "Evet", "not": ""}, {"tarih": "17.07.2026", "aciklama": "YARD TURİZM A.Ş.", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": 1397.0, "dahil": "Evet", "not": ""}, {"tarih": "17.07.2026", "aciklama": "ELİT VALE PARK VE GIDA", "kart": "Yapı Kredi Crystal", "kategori": "Vale/Park", "tutar": 250.0, "dahil": "Evet", "not": ""}, {"tarih": "18.07.2026", "aciklama": "Restoran %5 indirimi", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": -22.0, "dahil": "Evet", "not": ""}, {"tarih": "18.07.2026", "aciklama": "Restoran %5 indirimi", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": -121.63, "dahil": "Evet", "not": ""}, {"tarih": "18.07.2026", "aciklama": "SUPPLEMENTLER.COM", "kart": "Yapı Kredi Crystal", "kategori": "Sağlık", "tutar": 1698.3, "dahil": "Evet", "not": ""}, {"tarih": "18.07.2026", "aciklama": "ALL SPORTS MERAK GIDA", "kart": "Yapı Kredi Crystal", "kategori": "Sağlık", "tutar": 440.0, "dahil": "Evet", "not": ""}, {"tarih": "18.07.2026", "aciklama": "ELİT VALE PARK VE GIDA", "kart": "Yapı Kredi Crystal", "kategori": "Vale/Park", "tutar": 250.0, "dahil": "Evet", "not": ""}, {"tarih": "18.07.2026", "aciklama": "DÖNERCİ VEDAT", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": 2432.5, "dahil": "Evet", "not": ""}, {"tarih": "19.07.2026", "aciklama": "Restoran %5 indirimi", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": -77.91, "dahil": "Evet", "not": ""}, {"tarih": "19.07.2026", "aciklama": "ORTA KONAK GAYRİMENKUL", "kart": "Yapı Kredi Crystal", "kategori": "Diğer/Belirsiz", "tutar": 200.0, "dahil": "Evet", "not": ""}, {"tarih": "19.07.2026", "aciklama": "PAYCELL/GETİR1", "kart": "Yapı Kredi Crystal", "kategori": "Market/Gıda", "tutar": 1430.94, "dahil": "Evet", "not": ""}, {"tarih": "19.07.2026", "aciklama": "IYZICO *AMZNPRIMETR", "kart": "Yapı Kredi Crystal", "kategori": "Abonelik", "tutar": 69.9, "dahil": "Evet", "not": ""}, {"tarih": "19.07.2026", "aciklama": "YARD TURİZM A.Ş.", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": 1558.25, "dahil": "Evet", "not": ""}, {"tarih": "19.07.2026", "aciklama": "ELİT VALE PARK VE GIDA", "kart": "Yapı Kredi Crystal", "kategori": "Vale/Park", "tutar": 250.0, "dahil": "Evet", "not": ""}, {"tarih": "20.07.2026", "aciklama": "ASİL ERKEK KUAFÖRÜ", "kart": "Yapı Kredi Crystal", "kategori": "Kişisel Bakım", "tutar": 1200.0, "dahil": "Evet", "not": ""}, {"tarih": "20.07.2026", "aciklama": "HOTELS.COM (otel rezervasyonu)", "kart": "Yapı Kredi Crystal", "kategori": "Seyahat/Konaklama", "tutar": 62258.27, "dahil": "Evet", "not": "Yurt dışı otel rezervasyonu, online platform üzerinden"}, {"tarih": "20.07.2026", "aciklama": "ELİT VALE PARK VE GIDA", "kart": "Yapı Kredi Crystal", "kategori": "Vale/Park", "tutar": 250.0, "dahil": "Evet", "not": ""}, {"tarih": "20.07.2026", "aciklama": "ADA VALE", "kart": "Yapı Kredi Crystal", "kategori": "Vale/Park", "tutar": 450.0, "dahil": "Evet", "not": ""}, {"tarih": "21.07.2026", "aciklama": "ELİT VALE PARK VE GIDA", "kart": "Yapı Kredi Crystal", "kategori": "Vale/Park", "tutar": 250.0, "dahil": "Evet", "not": ""}, {"tarih": "23.07.2026", "aciklama": "Restoran %5 indirimi", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": -51.15, "dahil": "Evet", "not": ""}, {"tarih": "23.07.2026", "aciklama": "Otopark %50 indirim", "kart": "Yapı Kredi Crystal", "kategori": "Ulaşım", "tutar": -250.0, "dahil": "Evet", "not": ""}, {"tarih": "23.07.2026", "aciklama": "SPOTIFY", "kart": "Yapı Kredi Crystal", "kategori": "Abonelik", "tutar": 135.0, "dahil": "Evet", "not": ""}, {"tarih": "23.07.2026", "aciklama": "YARD TURİZM A.Ş.", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": 1023.0, "dahil": "Evet", "not": ""}, {"tarih": "23.07.2026", "aciklama": "ELİT VALE PARK VE GIDA", "kart": "Yapı Kredi Crystal", "kategori": "Vale/Park", "tutar": 500.0, "dahil": "Evet", "not": ""}, {"tarih": "24.07.2026", "aciklama": "Restoran %5 indirimi", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": -50.05, "dahil": "Evet", "not": ""}, {"tarih": "24.07.2026", "aciklama": "S/EVTEK SANAL", "kart": "Yapı Kredi Crystal", "kategori": "Online Alışveriş", "tutar": 2499.0, "dahil": "Evet", "not": ""}, {"tarih": "24.07.2026", "aciklama": "MONEYPAY *DIJITAL PLATFORM", "kart": "Yapı Kredi Crystal", "kategori": "Market/Gıda", "tutar": 2024.52, "dahil": "Evet", "not": ""}, {"tarih": "24.07.2026", "aciklama": "YARD TURİZM A.Ş.", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": 1001.0, "dahil": "Evet", "not": ""}, {"tarih": "24.07.2026", "aciklama": "ELİT VALE PARK VE GIDA", "kart": "Yapı Kredi Crystal", "kategori": "Vale/Park", "tutar": 250.0, "dahil": "Evet", "not": ""}, {"tarih": "25.07.2026", "aciklama": "Restoran %5 indirimi", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": -66.7, "dahil": "Evet", "not": ""}, {"tarih": "25.07.2026", "aciklama": "Otopark %50 indirim", "kart": "Yapı Kredi Crystal", "kategori": "Ulaşım", "tutar": -200.0, "dahil": "Evet", "not": ""}, {"tarih": "25.07.2026", "aciklama": "YARD TURİZM A.Ş.", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": 1334.0, "dahil": "Evet", "not": ""}, {"tarih": "25.07.2026", "aciklama": "ELİT VALE PARK VE GIDA", "kart": "Yapı Kredi Crystal", "kategori": "Vale/Park", "tutar": 250.0, "dahil": "Evet", "not": ""}, {"tarih": "25.07.2026", "aciklama": "ADA VALE", "kart": "Yapı Kredi Crystal", "kategori": "Vale/Park", "tutar": 450.0, "dahil": "Evet", "not": ""}, {"tarih": "25.07.2026", "aciklama": "AS VALE SIRALI KEBAP", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": 500.0, "dahil": "Evet", "not": ""}, {"tarih": "26.07.2026", "aciklama": "Restoran %5 indirimi", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": -44.28, "dahil": "Evet", "not": ""}, {"tarih": "26.07.2026", "aciklama": "YARD TURİZM A.Ş.", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": 885.5, "dahil": "Evet", "not": ""}, {"tarih": "26.07.2026", "aciklama": "YARD TURİZM A.Ş.", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": 1069.5, "dahil": "Evet", "not": ""}, {"tarih": "26.07.2026", "aciklama": "ELİT VALE PARK VE GIDA", "kart": "Yapı Kredi Crystal", "kategori": "Vale/Park", "tutar": 250.0, "dahil": "Evet", "not": ""}, {"tarih": "27.07.2026", "aciklama": "Restoran %5 indirimi", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": -10.06, "dahil": "Evet", "not": ""}, {"tarih": "27.07.2026", "aciklama": "YARD TURİZM A.Ş.", "kart": "Yapı Kredi Crystal", "kategori": "Yeme-İçme", "tutar": 201.25, "dahil": "Evet", "not": ""}, {"tarih": "27.07.2026", "aciklama": "ELİT VALE PARK VE GIDA", "kart": "Yapı Kredi Crystal", "kategori": "Vale/Park", "tutar": 250.0, "dahil": "Evet", "not": ""}, {"tarih": "28.07.2026", "aciklama": "MACROCENTER İSTİNYE PARK", "kart": "Yapı Kredi Crystal", "kategori": "Market/Gıda", "tutar": 171.9, "dahil": "Evet", "not": ""}, {"tarih": "15.04.2026", "aciklama": "OTOMOTİV LASTİKLERİ (4/6 taksit)", "kart": "Yapı Kredi Crystal", "kategori": "Oto Bakım", "tutar": 1000.0, "dahil": "Evet", "not": "6.000 TL'lik işlemin 4. taksidi"}, {"tarih": "06.05.2026", "aciklama": "HEPSIPAY *HEPSIBURADA (3/9 taksit)", "kart": "Yapı Kredi Crystal", "kategori": "Online Alışveriş", "tutar": 3431.33, "dahil": "Evet", "not": "30.881,96 TL'lik işlem"}, {"tarih": "06.05.2026", "aciklama": "HEPSIPAY *HEPSIBURADA (3/6 taksit)", "kart": "Yapı Kredi Crystal", "kategori": "Online Alışveriş", "tutar": 1920.65, "dahil": "Evet", "not": "11.523,90 TL'lik işlem"}, {"tarih": "10.05.2026", "aciklama": "HEPSIPAY *HEPSIBURADA (3/3 taksit - son)", "kart": "Yapı Kredi Crystal", "kategori": "Online Alışveriş", "tutar": 1126.9, "dahil": "Evet", "not": "3.380,70 TL'lik işlem, tamamlandı"}, {"tarih": "16.05.2026", "aciklama": "HEPSIPAY *HEPSIBURADA (3/3 taksit - son)", "kart": "Yapı Kredi Crystal", "kategori": "Online Alışveriş", "tutar": 490.94, "dahil": "Evet", "not": "1.472,81 TL'lik işlem, tamamlandı"}, {"tarih": "16.05.2026", "aciklama": "HEPSIPAY *HEPSIBURADA (3/3 taksit - son)", "kart": "Yapı Kredi Crystal", "kategori": "Online Alışveriş", "tutar": 951.18, "dahil": "Evet", "not": "2.853,54 TL'lik işlem, tamamlandı"}, {"tarih": "19.05.2026", "aciklama": "HEPSIPAY *HEPSIBURADA (3/6 taksit)", "kart": "Yapı Kredi Crystal", "kategori": "Online Alışveriş", "tutar": 3591.66, "dahil": "Evet", "not": "21.549,98 TL'lik işlem"}, {"tarih": "24.05.2026", "aciklama": "HEPSIPAY *HEPSIBURADA (3/3 taksit - son)", "kart": "Yapı Kredi Crystal", "kategori": "Online Alışveriş", "tutar": 469.47, "dahil": "Evet", "not": "1.408,40 TL'lik işlem, tamamlandı"}, {"tarih": "31.05.2026", "aciklama": "IYZICO *FINEROOMLIVIBURSA (2/3 taksit)", "kart": "Yapı Kredi Crystal", "kategori": "Online Alışveriş", "tutar": 2953.0, "dahil": "Evet", "not": "8.859 TL'lik işlem"}, {"tarih": "08.06.2026", "aciklama": "HEPSIPAY *HEPSIBURADA (3/6 taksit iade)", "kart": "Yapı Kredi Crystal", "kategori": "Online Alışveriş", "tutar": -3591.65, "dahil": "Evet", "not": "21.549,90 TL'lik iadenin taksidi"}, {"tarih": "10.06.2026", "aciklama": "MOKAUNİTED/DERSSANAL (2/12 taksit)", "kart": "Yapı Kredi Crystal", "kategori": "Eğitim (Passthrough)", "tutar": 58333.33, "dahil": "Hayır", "not": "700.000 TL'lik eğitim yatırımı - passthrough, toplama dahil değil"}, {"tarih": "18.06.2026", "aciklama": "HEPSIPAY *HEPSIBURADA (2/6 taksit)", "kart": "Yapı Kredi Crystal", "kategori": "Online Alışveriş", "tutar": 1649.64, "dahil": "Evet", "not": "9.897,85 TL'lik işlem"}, {"tarih": "18.06.2026", "aciklama": "IYZICO *AMAZON.COM.T (2/3 taksit)", "kart": "Yapı Kredi Crystal", "kategori": "Online Alışveriş", "tutar": 1049.79, "dahil": "Evet", "not": "3.149,37 TL'lik işlem"}, {"tarih": "30.06.2026", "aciklama": "SOMPO SİGORTA (1/3 taksit)", "kart": "Yapı Kredi Crystal", "kategori": "BES/Emeklilik/Sigorta", "tutar": 2849.74, "dahil": "Evet", "not": "8.549,22 TL'lik işlem"}, {"tarih": "18.07.2026", "aciklama": "IYZICO *AMAZON.COM.T (1/9 taksit)", "kart": "Yapı Kredi Crystal", "kategori": "Online Alışveriş", "tutar": 1444.36, "dahil": "Evet", "not": "12.999 TL'lik işlem"}, {"tarih": "21.07.2026", "aciklama": "HEPSIPAY *HEPSIBURADA (1/3 taksit)", "kart": "Yapı Kredi Crystal", "kategori": "Online Alışveriş", "tutar": 880.81, "dahil": "Evet", "not": "2.642,43 TL'lik işlem"}, {"tarih": "23.07.2026", "aciklama": "APPLE STORE (1/3 taksit)", "kart": "Yapı Kredi Crystal", "kategori": "Elektronik", "tutar": 183.0, "dahil": "Evet", "not": "549 TL'lik cihaz/aksesuar alımı"}, {"tarih": "31.07.2026", "aciklama": "KATILIM EMEKLİLİK VE HAYAT", "kart": "Kart •8016", "kategori": "BES/Emeklilik/Sigorta", "tutar": 40000.0, "dahil": "Evet", "not": ""}, {"tarih": "29.07.2026", "aciklama": "NAKİL VASITALARI VERGİSİ (MTV)", "kart": "Kart •8016", "kategori": "Vergi", "tutar": 4506.0, "dahil": "Evet", "not": ""}, {"tarih": "28.07.2026", "aciklama": "ÜÇEL DAYANIKLI TÜKETİM (5/6 taksit)", "kart": "Kart •8016", "kategori": "Elektronik", "tutar": 443.33, "dahil": "Evet", "not": ""}, {"tarih": "27.07.2026", "aciklama": "SUPERSTEP-İSTİNYE (3/4 taksit)", "kart": "Kart •8016", "kategori": "Giyim/Aksesuar", "tutar": 3324.75, "dahil": "Evet", "not": ""}, {"tarih": "26.07.2026", "aciklama": "BOOKING.COM HOTEL", "kart": "Kart •8016", "kategori": "Seyahat/Konaklama", "tutar": 20134.12, "dahil": "Evet", "not": "Yurt dışı otel rezervasyonu"}, {"tarih": "22.07.2026", "aciklama": "TURKCELL FATURA", "kart": "Kart •8016", "kategori": "Abonelik", "tutar": 1327.0, "dahil": "Evet", "not": ""}, {"tarih": "16.07.2026", "aciklama": "LINKEDIN PREMIUM", "kart": "Kart •8016", "kategori": "Abonelik", "tutar": 1708.36, "dahil": "Evet", "not": ""}, {"tarih": "15.07.2026", "aciklama": "ŞİŞLİ BELEDİYESİ (3/3 taksit - son)", "kart": "Kart •8016", "kategori": "Vergi", "tutar": 15816.87, "dahil": "Evet", "not": ""}, {"tarih": "14.07.2026", "aciklama": "G.E. EMEKLİLİK KATKISI", "kart": "Kart •8016", "kategori": "BES/Emeklilik/Sigorta", "tutar": 7500.0, "dahil": "Evet", "not": ""}, {"tarih": "13.07.2026", "aciklama": "SUPERONLİNE İNTERNET", "kart": "Kart •8016", "kategori": "Abonelik", "tutar": 850.0, "dahil": "Evet", "not": ""}, {"tarih": "13.07.2026", "aciklama": "SUPERONLİNE İNTERNET", "kart": "Kart •8016", "kategori": "Abonelik", "tutar": 1300.0, "dahil": "Evet", "not": ""}, {"tarih": "13.07.2026", "aciklama": "QPAY (5/6 taksit)", "kart": "Kart •8016", "kategori": "BES/Emeklilik/Sigorta", "tutar": 6137.4, "dahil": "Evet", "not": ""}, {"tarih": "10.07.2026", "aciklama": "TRENDYOL.COM (3/3 taksit - son)", "kart": "Kart •8016", "kategori": "Market/Gıda", "tutar": 1426.33, "dahil": "Evet", "not": ""}, {"tarih": "07.07.2026", "aciklama": "NAKİL VASITALARI VERGİSİ (MTV, 2. taksit)", "kart": "Kart •8016", "kategori": "Vergi", "tutar": 3750.0, "dahil": "Evet", "not": ""}, {"tarih": "07.07.2026", "aciklama": "IYZICO *AMAZON.COM.T (3/3 taksit - son)", "kart": "Kart •8016", "kategori": "Online Alışveriş", "tutar": 24236.0, "dahil": "Evet", "not": "Kaynak ekstrede 'Market' etiketli - Online Alışveriş'e taşındı"}, {"tarih": "02.07.2026", "aciklama": "TODTV.COM.TR (9/12 taksit)", "kart": "Kart •8016", "kategori": "Abonelik", "tutar": 199.0, "dahil": "Evet", "not": ""}, {"tarih": "02.07.2026", "aciklama": "NETFLIX.COM", "kart": "Kart •8016", "kategori": "Abonelik", "tutar": 379.99, "dahil": "Evet", "not": ""}, {"tarih": "02.07.2026", "aciklama": "YATAŞ-YATAK VE YORGAN (3/9 taksit)", "kart": "Kart •8016", "kategori": "Online Alışveriş", "tutar": 1488.81, "dahil": "Evet", "not": "Ev/Dekorasyon - Online Alışveriş'e dahil edildi"}, {"tarih": "02.07.2026", "aciklama": "TAN İNVEST (3/3 taksit - son)", "kart": "Kart •8016", "kategori": "Online Alışveriş", "tutar": 4014.42, "dahil": "Evet", "not": "Ev/Dekorasyon - Online Alışveriş'e dahil edildi"}, {"tarih": "17.07.2026", "aciklama": "SUPERSTEP-İSTİNYE (3/4 taksit)", "kart": "Kart •032", "kategori": "Giyim/Aksesuar", "tutar": 339.25, "dahil": "Evet", "not": ""}, {"tarih": "17.07.2026", "aciklama": "TAN İNVEST (3/3 taksit - son)", "kart": "Kart •032", "kategori": "Online Alışveriş", "tutar": 2303.3, "dahil": "Evet", "not": "Ev/Dekorasyon - Online Alışveriş'e dahil edildi"}, {"tarih": "17.07.2026", "aciklama": "BARÇIN SPOR MALZEMELERİ (3/4 taksit)", "kart": "Kart •032", "kategori": "Giyim/Aksesuar", "tutar": 4399.87, "dahil": "Evet", "not": ""}, {"tarih": "15.07.2026", "aciklama": "BRITISH AIRWAYS (uçak bileti)", "kart": "Kart •032", "kategori": "Seyahat/Konaklama", "tutar": 8702.41, "dahil": "Evet", "not": ""}, {"tarih": "25.07.2026", "aciklama": "ELBET STEAKHOUSE", "kart": "Garanti Amex Platinum", "kategori": "Yeme-İçme", "tutar": 2560.0, "dahil": "Evet", "not": ""}];
+
+let store = {
+  "Haziran 2026": HAZIRAN_RAW.map(r => ({...r})),
+  "Temmuz 2026": TEMMUZ_RAW.map(r => ({...r})),
+};
+let original = {
+  "Haziran 2026": HAZIRAN_RAW.map(r => ({...r})),
+  "Temmuz 2026": TEMMUZ_RAW.map(r => ({...r})),
+};
+
+const TR_MONTHS = ["Ocak","Şubat","Mart","Nisan","Mayıs","Haziran","Temmuz","Ağustos","Eylül","Ekim","Kasım","Aralık"];
+function monthSortKey(label){
+  const parts = String(label).trim().split(/\s+/);
+  const name = parts[0], year = parseInt(parts[1],10) || 0;
+  const idx = TR_MONTHS.indexOf(name);
+  return year*12 + (idx>=0?idx:0);
+}
+function monthKeysSorted(){
+  return Object.keys(store).sort((a,b) => monthSortKey(a)-monthSortKey(b));
+}
+function assignIdsFor(monthLabel){
+  store[monthLabel].forEach((r,i) => { if(!r._id) r._id = monthLabel+'-'+i+'-'+Math.random().toString(36).slice(2,7); });
+}
+monthKeysSorted().forEach(assignIdsFor);
+
+function ensureCategory(cat){
+  if (cat && !CATS.includes(cat)) CATS.splice(CATS.length-1, 0, cat); // Eğitim'i her zaman sonda tut
+}
+
+const fmt = n => Math.round(n).toLocaleString('tr-TR');
+
+function computeTotals(monthKey){
+  const rows = store[monthKey] || [];
+  const totals = {};
+  CATS.forEach(c => totals[c] = 0);
+  rows.forEach(r => {
+    if (r.dahil === 'Evet' && totals.hasOwnProperty(r.kategori)) {
+      totals[r.kategori] += Number(r.tutar) || 0;
+    }
+  });
+  return totals;
+}
+function grandTotal(totals){
+  return CATS.filter(c => c !== 'Eğitim (Passthrough)').reduce((s,c) => s + (totals[c]||0), 0);
+}
+
+/* ============ AY KONTROLLERİNİ KUR ============ */
+let activeMonth = null;
+let monthFilter = null;
+
+function otherMonth(m){
+  const keys = monthKeysSorted();
+  const idx = keys.indexOf(m);
+  if (idx > 0) return keys[idx-1];
+  if (idx === 0 && keys.length > 1) return keys[1];
+  return m;
+}
+
+function rebuildMonthControls(){
+  const keys = monthKeysSorted();
+  if (!keys.includes(activeMonth)) activeMonth = keys[keys.length-1];
+  if (!keys.includes(monthFilter) && monthFilter !== 'Tümü') monthFilter = keys[keys.length-1];
+
+  const dash = document.getElementById('monthTabsDashboard');
+  dash.innerHTML = keys.map(k => `<button class="pill${k===activeMonth?' active':''}" data-month="${k}">${k}</button>`).join('')
+    + `<button class="pill addmonth" data-addmonth="dashboard" title="Yeni ay sekmesi ekle">+</button>`;
+
+  const ham = document.getElementById('monthTabsHam');
+  ham.innerHTML = keys.map(k => `<button class="pill${k===monthFilter?' active':''}" data-monthfilter="${k}">${k}</button>`).join('')
+    + `<button class="pill${monthFilter==='Tümü'?' active':''}" data-monthfilter="Tümü">Tümü</button>`
+    + `<button class="pill addmonth" data-addmonth="ham" title="Yeni ay sekmesi ekle">+</button>`;
+
+  // Veri Girişi formundaki ay seçici
+  const sel = document.getElementById('f_ay');
+  if (sel){
+    sel.innerHTML = keys.map(k => `<option value="${k}">${k}</option>`).join('');
+  }
+  // kategori seçici
+  const catSel = document.getElementById('f_kategori');
+  if (catSel){
+    catSel.innerHTML = CATS.map(c => `<option value="${c}">${c}</option>`).join('');
+  }
+
+  renderMonthsList();
+}
+
+/* ============ DASHBOARD RENDER ============ */
+function allMonthTotals(){
+  return monthKeysSorted().map(k => ({ month:k, total: grandTotal(computeTotals(k)) }));
+}
+
+function renderKPIs(){
+  const data = allMonthTotals();
+  const kpiRow = document.getElementById('kpiRow');
+  document.getElementById('allMonthsNote').textContent = data.length + ' ay';
+  if (!data.length){ kpiRow.innerHTML = ''; return; }
+
+  const total = data.reduce((s,d) => s+d.total, 0);
+  const avg = total / data.length;
+  const maxM = data.reduce((a,b) => b.total>a.total?b:a, data[0]);
+  const minM = data.reduce((a,b) => b.total<a.total?b:a, data[0]);
+
+  const cards = [
+    {label:'Toplam Harcama', value: fmt(total)+' TL', sub: data.length+' ay toplamı'},
+    {label:'Ortalama / Ay', value: fmt(avg)+' TL', sub:'Eğitim hariç'},
+    {label:'En Yüksek Ay', value: fmt(maxM.total)+' TL', sub: maxM.month},
+    {label:'En Düşük Ay', value: fmt(minM.total)+' TL', sub: minM.month},
+  ];
+  kpiRow.innerHTML = cards.map(c => `
+    <div class="kpi">
+      <div class="kpi-label">${c.label}</div>
+      <div class="kpi-value">${c.value}</div>
+      <div class="kpi-sub">${c.sub}</div>
+    </div>`).join('');
+}
+
+function renderTrend(){
+  const data = allMonthTotals();
+  const chart = document.getElementById('trendChart');
+  chart.innerHTML = '';
+  if (!data.length) return;
+  const maxVal = Math.max(...data.map(d => d.total), 1);
+  const latest = data[data.length-1].month;
+
+  data.forEach(d => {
+    const h = Math.max(d.total,0)/maxVal*130;
+    const col = document.createElement('div');
+    col.className = 'trend-bar-col';
+    col.innerHTML = `
+      <div class="trend-bar-value">${fmt(d.total)}</div>
+      <div class="trend-bar${d.month===latest?' latest':''}" data-h="${h}"></div>
+      <div class="trend-bar-label">${d.month}</div>`;
+    chart.appendChild(col);
+  });
+  requestAnimationFrame(() => {
+    setTimeout(() => {
+      chart.querySelectorAll('.trend-bar').forEach(el => el.style.height = el.dataset.h+'px');
+    }, 60);
+  });
+}
+
+function renderInsights(){
+  const data = allMonthTotals();
+  const list = document.getElementById('insightList');
+  const insights = [];
+
+  if (data.length < 2){
+    insights.push('Trend ve karşılaştırma çıkarımları için en az 2 ay veri gerekiyor. Veri Girişi sekmesinden yeni bir ay ekleyin.');
+  } else {
+    const total = data.reduce((s,d)=>s+d.total,0);
+    const avg = total/data.length;
+    insights.push(`${data.length} aylık veri setinde ortalama aylık harcama <b>${fmt(avg)} TL</b> (Eğitim hariç).`);
+
+    const last = data[data.length-1], prev = data[data.length-2];
+    const diff = last.total - prev.total;
+    const pct = prev.total !== 0 ? (diff/Math.abs(prev.total)*100) : 0;
+    if (diff >= 0){
+      insights.push(`<b>${last.month}</b>, bir önceki aya göre <b>▲ %${pct.toFixed(1)}</b> daha yüksek harcamayla kapandı (+${fmt(diff)} TL).`);
+    } else {
+      insights.push(`<b>${last.month}</b>, bir önceki aya göre <b>▼ %${Math.abs(pct).toFixed(1)}</b> daha düşük harcamayla kapandı (${fmt(diff)} TL).`);
+    }
+
+    // kategori bazinda ortalama ve degiskenlik
+    const cats = CATS.filter(c => c !== 'Eğitim (Passthrough)');
+    const catStats = cats.map(c => {
+      const vals = monthKeysSorted().map(k => computeTotals(k)[c]||0);
+      const avgc = vals.reduce((s,v)=>s+v,0)/vals.length;
+      const maxc = Math.max(...vals), minc = Math.min(...vals);
+      return {c, avgc, range: maxc-minc, maxc};
+    });
+    const topAvg = catStats.reduce((a,b)=>b.avgc>a.avgc?b:a, catStats[0]);
+    insights.push(`En yüksek ortalama harcamaya sahip kategori <b>${topAvg.c}</b> — ayda ortalama <b>${fmt(topAvg.avgc)} TL</b>.`);
+
+    const mostVolatile = catStats.reduce((a,b)=>b.range>a.range?b:a, catStats[0]);
+    if (mostVolatile.range > 0){
+      insights.push(`En dalgalı kategori <b>${mostVolatile.c}</b> — aylar arasında <b>${fmt(mostVolatile.range)} TL</b>'ye varan fark gösteriyor.`);
+    }
+  }
+  insights.push('Eğitim yatırımı (MOKAUnited/Derssanal, ~58.333 TL/ay) bilinçli olarak tüm bu çıkarımların dışında tutulmuştur.');
+
+  list.innerHTML = insights.map(t => `<div class="insight-item"><span class="insight-mark">"</span><div class="insight-text">${t}</div></div>`).join('');
+}
+
+function renderOzet(){
+  renderKPIs();
+  renderTrend();
+  renderInsights();
+  const keys = monthKeysSorted();
+  if (!keys.length) return;
+  const om = otherMonth(activeMonth);
+  const tA = computeTotals(activeMonth);
+  const tO = computeTotals(om);
+  const gA = grandTotal(tA);
+  const gO = grandTotal(tO);
+  const showCompare = om !== activeMonth;
+
+  document.getElementById('ozetTitle').innerHTML = showCompare ? `${om} <em>→</em> ${activeMonth}` : activeMonth;
+  document.getElementById('heroLabel').textContent = activeMonth + ' Toplam Harcama';
+  document.getElementById('heroNumber').innerHTML = fmt(gA) + '<sup>TL</sup>';
+  document.getElementById('heroCompare').textContent = showCompare ? (om + ': ' + fmt(gO) + ' TL') : 'Karşılaştırılacak başka ay yok';
+  document.getElementById('legendActive').textContent = activeMonth;
+  document.getElementById('legendOther').textContent = om;
+  document.getElementById('ledgerNote').textContent = activeMonth + "'a göre sıralı";
+
+  const badge = document.getElementById('heroBadge');
+  if (!showCompare){
+    badge.className = 'hero-badge fall';
+    badge.innerHTML = 'Tek ay yüklü';
+  } else {
+    const diff = gA - gO;
+    const pct = gO !== 0 ? (diff/Math.abs(gO)*100) : 0;
+    if (diff >= 0){
+      badge.className = 'hero-badge rise';
+      badge.innerHTML = '▲ +' + fmt(diff) + ' TL &nbsp;·&nbsp; +' + pct.toFixed(1).replace('.',',') + '%';
+    } else {
+      badge.className = 'hero-badge fall';
+      badge.innerHTML = '▼ ' + fmt(diff) + ' TL &nbsp;·&nbsp; ' + pct.toFixed(1).replace('.',',') + '%';
+    }
+  }
+
+  const maxVal = Math.max(...CATS.map(c => Math.max(tA[c]||0, tO[c]||0)), 1);
+  const list = CATS.filter(c => c !== 'Eğitim (Passthrough)')
+                    .map(c => ({name:c, active:tA[c]||0, other:tO[c]||0}))
+                    .sort((a,b) => b.active - a.active);
+
+  const activeIdx = keys.indexOf(activeMonth);
+  const otherIdx = keys.indexOf(om);
+  const isActiveLater = activeIdx >= otherIdx;
+
+  const container = document.getElementById('ledgerRows');
+  container.innerHTML = '';
+  list.forEach((d,i) => {
+    const row = document.createElement('div');
+    row.className = 'row';
+    const activeW = Math.max(d.active,0)/maxVal*100;
+    const otherW = Math.max(d.other,0)/maxVal*100;
+
+    const laterVal = isActiveLater ? d.active : d.other;
+    const earlierVal = isActiveLater ? d.other : d.active;
+
+    let deltaHTML = '';
+    let sub = '';
+    if (!showCompare){
+      deltaHTML = '';
+    } else if (earlierVal === 0 && laterVal > 0){
+      if (isActiveLater){ deltaHTML = '<div class="fig-delta new">YENİ</div>'; sub = 'Yeni kalem'; }
+      else { deltaHTML = '<div class="fig-delta flat">—</div>'; sub = om + "'da başladı"; }
+    } else if (laterVal === 0 && earlierVal > 0){
+      deltaHTML = '<div class="fig-delta fall">▼ 100%</div>';
+      if (!isActiveLater) sub = om + "'da sıfırlandı";
+    } else if (d.other === d.active){
+      deltaHTML = '<div class="fig-delta flat">değişim yok</div>';
+    } else if (d.other !== 0 && Math.abs(d.other) > (maxVal*0.02)) {
+      const pctc = (d.active - d.other)/Math.abs(d.other)*100;
+      const cls = pctc > 0 ? 'rise' : 'fall';
+      const arrow = pctc > 0 ? '▲' : '▼';
+      deltaHTML = '<div class="fig-delta '+cls+'">'+arrow+' '+Math.abs(pctc).toFixed(0)+'%</div>';
+    } else {
+      const diffv = d.active - d.other;
+      const cls = diffv > 0 ? 'rise' : 'fall';
+      const arrow = diffv > 0 ? '▲' : '▼';
+      deltaHTML = '<div class="fig-delta '+cls+'">'+arrow+' '+fmt(Math.abs(diffv))+' TL</div>';
+    }
+    if (d.active < 0) sub = 'Net iade';
+
+    row.innerHTML = `
+      <div class="rank">${String(i+1).padStart(2,'0')}</div>
+      <div class="cat-name">${d.name}${sub ? `<span class="sub">${sub}</span>` : ''}</div>
+      <div class="bar-track">
+        <div class="bar-fill" style="width:${activeW}%"></div>
+        ${showCompare ? `<div class="bar-mark" style="left:${otherW}%"></div>` : ''}
+      </div>
+      <div class="figs">
+        <div class="fig-main">${fmt(d.active)} TL</div>
+        ${deltaHTML}
+      </div>`;
+    container.appendChild(row);
+  });
+
+  renderMovers();
+
+  let totalRows = 0;
+  keys.forEach(k => totalRows += store[k].length);
+  document.getElementById('rowCountNote').textContent = totalRows;
+}
+
+function renderMovers(){
+  const keys = monthKeysSorted();
+  const grid = document.getElementById('moversGrid');
+  if (keys.length < 2){ grid.innerHTML = '<div class="mover"><div class="mover-tag">Bilgi</div><div class="mover-name">Karşılaştırma için en az 2 ay gerekli</div><div class="mover-desc">Veri Girişi sekmesinden yeni bir ay ekleyin.</div></div>'; return; }
+  const latest = keys[keys.length-1], prev = keys[keys.length-2];
+  const tH = computeTotals(prev);
+  const tT = computeTotals(latest);
+  const cats = CATS.filter(c => c !== 'Eğitim (Passthrough)');
+
+  let newCat = null, riser = null, faller = null, netCredit = null;
+  let newMax = -Infinity, riseMax = -Infinity, fallMin = Infinity;
+
+  cats.forEach(c => {
+    const h = tH[c]||0, t = tT[c]||0;
+    const delta = t - h;
+    if (h === 0 && t > 0 && t > newMax){ newMax = t; newCat = c; }
+    if (t < 0 && (netCredit === null || t < tT[netCredit])) netCredit = c;
+    if (h > 0){
+      if (delta > 0 && delta > riseMax && c !== newCat){ riseMax = delta; riser = c; }
+      if (delta < fallMin){ fallMin = delta; faller = c; }
+    }
+  });
+
+  const cards = [];
+  if (newCat){
+    cards.push({tag:'Yeni Kalem', name:newCat, delta:'+'+fmt(tT[newCat])+' TL', cls:'new',
+      desc:prev+"'da yoktu, "+latest+"'da "+fmt(tT[newCat])+" TL ile öne çıktı."});
+  }
+  if (riser){
+    const pct = ((tT[riser]-tH[riser])/tH[riser]*100).toFixed(0);
+    cards.push({tag:'En Sert Yükseliş', name:riser, delta:'▲ '+pct+'%', cls:'rise',
+      desc:fmt(tH[riser])+' TL → '+fmt(tT[riser])+' TL arasında en büyük artış.'});
+  }
+  if (faller){
+    const pct = ((tT[faller]-tH[faller])/tH[faller]*100).toFixed(0);
+    cards.push({tag:'En Büyük Düşüş', name:faller, delta:pct+'%', cls:'fall',
+      desc:fmt(tH[faller])+' TL → '+fmt(tT[faller])+' TL arasında en büyük azalış.'});
+  }
+  if (netCredit){
+    cards.push({tag:'Net İade', name:netCredit, delta:fmt(tT[netCredit])+' TL', cls:'fall',
+      desc:'İndirim/iade tutarı dönem içi harcamayı aştı; kategori net alacakla kapandı.'});
+  }
+
+  grid.innerHTML = '';
+  const shown = cards.slice(0,4);
+  shown.forEach(c => {
+    const el = document.createElement('div');
+    el.className = 'mover';
+    el.innerHTML = `<div class="mover-tag">${c.tag}</div>
+      <div class="mover-name">${c.name}</div>
+      <div class="mover-delta ${c.cls}">${c.delta}</div>
+      <div class="mover-desc">${c.desc}</div>`;
+    grid.appendChild(el);
+  });
+  if (!shown.length){
+    grid.style.gridTemplateColumns = '1fr';
+    grid.innerHTML = '<div class="mover"><div class="mover-tag">Bilgi</div><div class="mover-name">Belirgin bir hareket yok</div><div class="mover-desc">İki ay arasında kayda değer bir kategori değişimi bulunamadı.</div></div>';
+  }
+}
+
+/* ============ HAM VERİ RENDER ============ */
+function rowsForFilter(){
+  if (monthFilter === 'Tümü'){
+    let out = [];
+    monthKeysSorted().forEach(k => { out = out.concat(store[k].map(r => ({...r, _ay:k}))); });
+    return out;
+  }
+  return (store[monthFilter]||[]).map(r => ({...r, _ay:monthFilter}));
+}
+
+function updateRowById(id, ay, field, value){
+  const row = (store[ay]||[]).find(r => r._id === id);
+  if (row) row[field] = value;
+}
+
+function updateLiveBar(){
+  const rows = rowsForFilter();
+  const included = rows.filter(r => r.dahil === 'Evet');
+  const total = included.reduce((s,r) => s + (Number(r.tutar)||0), 0);
+  document.getElementById('liveTotal').textContent = fmt(total) + ' TL';
+  document.getElementById('liveCount').textContent = rows.length;
+}
+
+function renderHamFixed(){
+  const rows = rowsForFilter();
+  const tbody = document.getElementById('rawTableBody');
+  tbody.innerHTML = '';
+  const catOptions = CATS.map(c => `<option value="${c}">${c}</option>`).join('');
+
+  rows.forEach(r => {
+    const tr = document.createElement('tr');
+    const negClass = Number(r.tutar) < 0 ? 'neg' : '';
+    tr.innerHTML = `
+      <td class="mono">${r.tarih || '—'}</td>
+      <td class="desc">${r.aciklama}</td>
+      <td><span class="card-tag">${r.kart||'—'}</span></td>
+      <td><select class="cat-select"></select></td>
+      <td class="amt ${negClass}"><input class="amt-input" type="number" step="0.01" value="${r.tutar}"></td>
+      <td class="mono">${r._ay}</td>
+    `;
+    const select = tr.querySelector('.cat-select');
+    select.innerHTML = catOptions;
+    select.value = r.kategori;
+    const input = tr.querySelector('.amt-input');
+    const tdAmt = tr.querySelector('td.amt');
+
+    select.addEventListener('change', () => {
+      updateRowById(r._id, r._ay, 'kategori', select.value);
+      select.classList.add('edited');
+      renderOzet(); updateLiveBar();
+    });
+    input.addEventListener('change', () => {
+      const val = parseFloat(input.value) || 0;
+      updateRowById(r._id, r._ay, 'tutar', val);
+      input.classList.add('edited');
+      tdAmt.classList.toggle('neg', val < 0);
+      renderOzet(); updateLiveBar();
+    });
+
+    tbody.appendChild(tr);
+  });
+  updateLiveBar();
+}
+
+/* ============ VERİ GİRİŞİ ============ */
+function renderMonthsList(){
+  const keys = monthKeysSorted();
+  document.getElementById('monthsNote').textContent = keys.length + ' ay';
+  const el = document.getElementById('monthsList');
+  el.innerHTML = keys.map(k => {
+    const n = store[k].length;
+    const total = fmt(grandTotal(computeTotals(k)));
+    return `<div class="month-item">
+      <div>
+        <div class="month-item-name">${k}</div>
+        <div class="month-item-meta">${n} işlem · ${total} TL (Eğitim hariç)</div>
+      </div>
+      <div class="month-item-actions">
+        <button class="btn small danger" data-removemonth="${k}">Kaldır</button>
+      </div>
+    </div>`;
+  }).join('');
+
+  el.querySelectorAll('[data-removemonth]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const m = btn.dataset.removemonth;
+      if (monthKeysSorted().length <= 1){ alert('En az bir ay yüklü kalmalı.'); return; }
+      if (!confirm(m + " ayını ve tüm işlemlerini kaldırmak istediğinize emin misiniz?")) return;
+      delete store[m]; delete original[m];
+      rebuildMonthControls(); renderOzet(); renderHamFixed();
+    });
+  });
+}
+
+function parseWorkbook(workbook, statusEl){
+  let added = 0, updated = 0;
+  workbook.SheetNames.forEach(name => {
+    const m = name.match(/^(.+?)\s*Detay$/i);
+    if (!m) return;
+    const monthLabel = m[1].trim();
+    const ws = workbook.Sheets[name];
+    const rows2d = XLSX.utils.sheet_to_json(ws, {header:1, raw:true});
+    const parsed = [];
+    for (let i=1; i<rows2d.length; i++){
+      const r = rows2d[i];
+      if (!r || r[4]===undefined || r[4]===null || r[4]==='' || r[1]===undefined) continue;
+      const tutar = parseFloat(r[4]);
+      if (isNaN(tutar)) continue;
+      const kategori = (r[3]!==undefined && r[3]!==null && r[3]!=='') ? String(r[3]) : 'Diğer/Belirsiz';
+      ensureCategory(kategori);
+      parsed.push({
+        tarih: r[0]!==undefined ? String(r[0]) : '',
+        aciklama: r[1]!==undefined ? String(r[1]) : '',
+        kart: r[2]!==undefined ? String(r[2]) : '',
+        kategori: kategori,
+        tutar: tutar,
+        dahil: (r[5]!==undefined && r[5]!==null && r[5]!=='') ? String(r[5]) : 'Evet',
+        not: r[6]!==undefined ? String(r[6]) : ''
+      });
+    }
+    if (parsed.length){
+      if (store[monthLabel]) updated++; else added++;
+      store[monthLabel] = parsed;
+      original[monthLabel] = parsed.map(x => ({...x}));
+      assignIdsFor(monthLabel);
+    }
+  });
+  if (added+updated === 0){
+    statusEl.className = 'upload-status error';
+    statusEl.textContent = 'Uygun sayfa bulunamadı — sayfa adları "[Ay Yılı] Detay" formatında olmalı.';
+    return false;
+  }
+  statusEl.className = 'upload-status';
+  statusEl.textContent = `${added} yeni ay eklendi, ${updated} ay güncellendi.`;
+  activeMonth = monthKeysSorted()[monthKeysSorted().length-1];
+  monthFilter = activeMonth;
+  rebuildMonthControls(); renderOzet(); renderHamFixed();
+  return true;
+}
+
+function handleFile(file){
+  const statusEl = document.getElementById('uploadStatus');
+  if (!file){ return; }
+  if (!/\.(xlsx|xls)$/i.test(file.name)){
+    statusEl.className = 'upload-status error';
+    statusEl.textContent = 'Yalnızca .xlsx / .xls dosyaları desteklenir.';
+    return;
+  }
+  statusEl.className = 'upload-status';
+  statusEl.textContent = 'Okunuyor…';
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const data = new Uint8Array(e.target.result);
+      const wb = XLSX.read(data, {type:'array'});
+      parseWorkbook(wb, statusEl);
+    } catch(err){
+      statusEl.className = 'upload-status error';
+      statusEl.textContent = 'Dosya okunamadı: ' + err.message;
+    }
+  };
+  reader.readAsArrayBuffer(file);
+}
+
+/* ============ NAV / EVENTS ============ */
+document.getElementById('viewTabs').addEventListener('click', e => {
+  const btn = e.target.closest('.pill'); if(!btn) return;
+  document.querySelectorAll('#viewTabs .pill').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  const view = btn.dataset.view;
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.getElementById('view-'+view).classList.add('active');
+  document.getElementById('monthTabsDashboard').style.display = view === 'dashboard' ? 'inline-flex' : 'none';
+  document.getElementById('monthTabsHam').style.display = view === 'ham' ? 'inline-flex' : 'none';
+  window.scrollTo({top:0, behavior:'instant'});
+  setTimeout(updateFab, 50);
+});
+
+document.getElementById('monthTabsDashboard').addEventListener('click', e => {
+  const addBtn = e.target.closest('[data-addmonth]');
+  if (addBtn){ addNewMonth(); return; }
+  const btn = e.target.closest('.pill[data-month]'); if(!btn) return;
+  document.querySelectorAll('#monthTabsDashboard .pill[data-month]').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  activeMonth = btn.dataset.month;
+  renderOzet();
+});
+
+function addNewMonth(){
+  const name = prompt('Yeni ay adı girin (ör. Ağustos 2026):');
+  if (!name) return;
+  const trimmed = name.trim();
+  if (!trimmed) return;
+  if (store[trimmed]){
+    alert('Bu isimde bir ay zaten mevcut.');
+    activeMonth = trimmed; monthFilter = trimmed;
+    rebuildMonthControls(); renderOzet(); renderHamFixed();
+    return;
+  }
+  store[trimmed] = [];
+  original[trimmed] = [];
+  activeMonth = trimmed; monthFilter = trimmed;
+  rebuildMonthControls(); renderOzet(); renderHamFixed();
+}
+
+document.getElementById('monthTabsHam').addEventListener('click', e => {
+  const addBtn = e.target.closest('[data-addmonth]');
+  if (addBtn){ addNewMonth(); return; }
+  const btn = e.target.closest('.pill[data-monthfilter]'); if(!btn) return;
+  document.querySelectorAll('#monthTabsHam .pill[data-monthfilter]').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  monthFilter = btn.dataset.monthfilter;
+  renderHamFixed();
+});
+
+document.getElementById('btnReset').addEventListener('click', () => {
+  Object.keys(original).forEach(k => { store[k] = original[k].map(r => ({...r})); });
+  renderHamFixed(); renderOzet(); renderMonthsList();
+});
+
+document.getElementById('btnExport').addEventListener('click', () => {
+  const rows = rowsForFilter();
+  const header = ['Tarih','Açıklama','Kart','Kategori','Tutar (TL)','Ay'];
+  const lines = [header.join(';')];
+  rows.forEach(r => {
+    lines.push([r.tarih, '"'+String(r.aciklama).replace(/"/g,'""')+'"', r.kart, r.kategori, String(r.tutar).replace('.',','), r._ay].join(';'));
+  });
+  const blob = new Blob(['\uFEFF'+lines.join('\n')], {type:'text/csv;charset=utf-8;'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'ham_veri_'+monthFilter+'.csv';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+});
+
+/* dropzone */
+const dropzone = document.getElementById('dropzone');
+const fileInput = document.getElementById('fileInput');
+dropzone.addEventListener('click', () => fileInput.click());
+fileInput.addEventListener('change', () => { if (fileInput.files[0]) handleFile(fileInput.files[0]); });
+['dragenter','dragover'].forEach(ev => dropzone.addEventListener(ev, e => { e.preventDefault(); dropzone.classList.add('drag'); }));
+['dragleave','drop'].forEach(ev => dropzone.addEventListener(ev, e => { e.preventDefault(); dropzone.classList.remove('drag'); }));
+dropzone.addEventListener('drop', e => { if (e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]); });
+
+/* manuel giriş formu */
+document.getElementById('entryForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const yeniAy = document.getElementById('f_yeniay').value.trim();
+  const ay = yeniAy || document.getElementById('f_ay').value;
+  const kategori = document.getElementById('f_kategori').value;
+  const row = {
+    tarih: document.getElementById('f_tarih').value.trim(),
+    aciklama: document.getElementById('f_aciklama').value.trim(),
+    kart: document.getElementById('f_kart').value.trim(),
+    kategori: kategori,
+    tutar: parseFloat(document.getElementById('f_tutar').value) || 0,
+    dahil: document.getElementById('f_dahil').checked ? 'Evet' : 'Hayır',
+    not: ''
+  };
+  if (!row.aciklama || !row.tutar){ return; }
+  if (!store[ay]){ store[ay] = []; original[ay] = []; }
+  row._id = ay+'-new-'+Date.now()+'-'+Math.random().toString(36).slice(2,7);
+  store[ay].push(row);
+
+  activeMonth = ay; monthFilter = ay;
+  rebuildMonthControls(); renderOzet(); renderHamFixed();
+
+  document.getElementById('entryForm').reset();
+  document.getElementById('f_yeniay').value = '';
+  rebuildMonthControls();
+});
+
+/* scroll fab */
+const fab = document.getElementById('scrollFab');
+function updateFab(){
+  const hamActive = document.getElementById('view-ham').classList.contains('active');
+  const girisActive = document.getElementById('view-giris').classList.contains('active');
+  if (!hamActive && !girisActive){ fab.classList.remove('show'); return; }
+  fab.classList.add('show');
+  const nearBottom = window.innerHeight + window.scrollY >= document.body.scrollHeight - 80;
+  fab.textContent = nearBottom ? '↑' : '↓';
+}
+fab.addEventListener('click', () => {
+  const nearBottom = window.innerHeight + window.scrollY >= document.body.scrollHeight - 80;
+  window.scrollTo({top: nearBottom ? 0 : document.body.scrollHeight, behavior:'smooth'});
+});
+window.addEventListener('scroll', updateFab);
+
+/* tema değiştirici */
+const themeToggle = document.getElementById('themeToggle');
+const themeIcon = themeToggle.querySelector('.theme-icon');
+function applyTheme(mode){
+  document.documentElement.dataset.theme = mode;
+  themeIcon.textContent = mode === 'light' ? '☀' : '☾';
+  try{ localStorage.setItem('sbe-rapor-theme', mode); }catch(e){}
+}
+themeToggle.addEventListener('click', () => {
+  const current = document.documentElement.dataset.theme === 'light' ? 'dark' : 'light';
+  applyTheme(current);
+});
+let savedTheme = 'dark';
+try{ savedTheme = localStorage.getItem('sbe-rapor-theme') || 'dark'; }catch(e){}
+applyTheme(savedTheme);
+
+/* ============ İLK YÜKLEME ============ */
+activeMonth = monthKeysSorted()[monthKeysSorted().length-1];
+monthFilter = activeMonth;
+rebuildMonthControls();
+renderOzet();
+renderHamFixed();
+updateFab();
+</script>
+</body>
+</html>
